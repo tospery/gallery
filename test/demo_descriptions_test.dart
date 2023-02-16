@@ -30,21 +30,21 @@ void main() {
   });
 
   test('Demo descriptions are unique and correct', () {
-    final allDemos = Demos.all(GalleryLocalizationsEn());
+    final allDemos = allGalleryDemos(GalleryLocalizationsEn());
     final allDemoDescriptions = allDemos.map((d) => d.describe).toList();
 
     expect(_isUnique(allDemoDescriptions), true);
     expect(
       _stringListEquality.equals(
         allDemoDescriptions,
-        Demos.allDescriptions(),
+        allGalleryDemoDescriptions(),
       ),
       true,
     );
   });
 
   test('Special demo descriptions are correct', () {
-    final allDemos = Demos.allDescriptions();
+    final allDemos = allGalleryDemoDescriptions();
 
     final specialDemos = <String>[
       'shrine@study',

@@ -7,73 +7,34 @@ import 'package:flutter/material.dart';
 
 class MaterialDemoThemeData {
   static final themeData = ThemeData(
-      colorScheme: _colorScheme.copyWith(
-        background: Colors.white,
-      ),
-      canvasColor: _colorScheme.background,
-      highlightColor: Colors.transparent,
-      indicatorColor: _colorScheme.onPrimary,
-      scaffoldBackgroundColor: _colorScheme.background,
-      secondaryHeaderColor: _colorScheme.background,
-      typography: Typography.material2018(
-        platform: defaultTargetPlatform,
-      ),
-      visualDensity: VisualDensity.standard,
-      // Component themes
-      appBarTheme: AppBarTheme(
-        color: _colorScheme.primary,
-        iconTheme: IconThemeData(color: _colorScheme.onPrimary),
-      ),
-      bottomAppBarTheme: BottomAppBarTheme(
-        color: _colorScheme.primary,
-      ),
-      checkboxTheme: CheckboxThemeData(
-        fillColor: MaterialStateProperty.resolveWith<Color?>((states) {
-          if (states.contains(MaterialState.disabled)) {
-            return null;
-          }
-          return states.contains(MaterialState.selected)
-              ? _colorScheme.primary
-              : null;
-        }),
-      ),
-      radioTheme: RadioThemeData(
-        fillColor: MaterialStateProperty.resolveWith<Color?>((states) {
-          if (states.contains(MaterialState.disabled)) {
-            return null;
-          }
-          return states.contains(MaterialState.selected)
-              ? _colorScheme.primary
-              : null;
-        }),
-      ),
-      snackBarTheme: const SnackBarThemeData(
-        behavior: SnackBarBehavior.floating,
-      ),
-      switchTheme: SwitchThemeData(
-        thumbColor: MaterialStateProperty.resolveWith<Color?>((states) {
-          if (states.contains(MaterialState.disabled)) {
-            return null;
-          }
-          return states.contains(MaterialState.selected)
-              ? _colorScheme.primary
-              : null;
-        }),
-        trackColor: MaterialStateProperty.resolveWith<Color?>((states) {
-          if (states.contains(MaterialState.disabled)) {
-            return null;
-          }
-          return states.contains(MaterialState.selected)
-              ? _colorScheme.primary.withAlpha(0x80)
-              : null;
-        }),
-      ));
+    colorScheme: _colorScheme,
+    appBarTheme: AppBarTheme(
+      color: _colorScheme.primary,
+      iconTheme: IconThemeData(color: _colorScheme.onPrimary),
+    ),
+    bottomAppBarTheme: BottomAppBarTheme(
+      color: _colorScheme.primary,
+    ),
+    canvasColor: _colorScheme.background,
+    toggleableActiveColor: _colorScheme.primary,
+    highlightColor: Colors.transparent,
+    indicatorColor: _colorScheme.onPrimary,
+    primaryColor: _colorScheme.primary,
+    backgroundColor: Colors.white,
+    scaffoldBackgroundColor: _colorScheme.background,
+    snackBarTheme: const SnackBarThemeData(
+      behavior: SnackBarBehavior.floating,
+    ),
+    typography: Typography.material2018(
+      platform: defaultTargetPlatform,
+    ),
+  );
 
   static const _colorScheme = ColorScheme(
     primary: Color(0xFF6200EE),
-    primaryContainer: Color(0xFF6200EE),
+    primaryVariant: Color(0xFF6200EE),
     secondary: Color(0xFFFF5722),
-    secondaryContainer: Color(0xFFFF5722),
+    secondaryVariant: Color(0xFFFF5722),
     background: Colors.white,
     surface: Color(0xFFF2F2F2),
     onBackground: Colors.black,

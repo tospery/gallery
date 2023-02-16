@@ -24,13 +24,13 @@ void main() {
 
 class GalleryApp extends StatelessWidget {
   const GalleryApp({
-    super.key,
+    Key key,
     this.initialRoute,
     this.isTestMode = false,
-  });
+  }) : super(key: key);
 
-  final String? initialRoute;
   final bool isTestMode;
+  final String initialRoute;
 
   @override
   Widget build(BuildContext context) {
@@ -46,17 +46,16 @@ class GalleryApp extends StatelessWidget {
       ),
       child: Builder(
         builder: (context) {
-          final options = GalleryOptions.of(context);
           return MaterialApp(
             restorationScopeId: 'rootGallery',
             title: 'Flutter Gallery',
             debugShowCheckedModeBanner: false,
-            themeMode: options.themeMode,
+            themeMode: GalleryOptions.of(context).themeMode,
             theme: GalleryThemeData.lightThemeData.copyWith(
-              platform: options.platform,
+              platform: GalleryOptions.of(context).platform,
             ),
             darkTheme: GalleryThemeData.darkThemeData.copyWith(
-              platform: options.platform,
+              platform: GalleryOptions.of(context).platform,
             ),
             localizationsDelegates: const [
               ...GalleryLocalizations.localizationsDelegates,
@@ -64,10 +63,10 @@ class GalleryApp extends StatelessWidget {
             ],
             initialRoute: initialRoute,
             supportedLocales: GalleryLocalizations.supportedLocales,
-            locale: options.locale,
-            localeListResolutionCallback: (locales, supportedLocales) {
-              deviceLocale = locales?.first;
-              return basicLocaleListResolution(locales, supportedLocales);
+            locale: GalleryOptions.of(context).locale,
+            localeResolutionCallback: (locale, supportedLocales) {
+              deviceLocale = locale;
+              return locale;
             },
             onGenerateRoute: RouteConfiguration.onGenerateRoute,
           );
@@ -79,8 +78,8 @@ class GalleryApp extends StatelessWidget {
 
 class RootPage extends StatelessWidget {
   const RootPage({
-    super.key,
-  });
+    Key key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

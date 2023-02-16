@@ -4,7 +4,6 @@
 
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/gallery_localizations.dart';
 import 'package:gallery/data/gallery_options.dart';
 import 'package:gallery/layout/letter_spacing.dart';
@@ -19,7 +18,7 @@ import 'package:google_fonts/google_fonts.dart';
 /// The home route is the main page with tabs for sub pages.
 /// The login route is the initial route.
 class RallyApp extends StatelessWidget {
-  const RallyApp({super.key});
+  const RallyApp({Key key}) : super(key: key);
 
   static const String loginRoute = routes.loginRoute;
   static const String homeRoute = routes.homeRoute;
@@ -58,12 +57,9 @@ class RallyApp extends StatelessWidget {
   ThemeData _buildRallyTheme() {
     final base = ThemeData.dark();
     return ThemeData(
-      appBarTheme: const AppBarTheme(
-        systemOverlayStyle: SystemUiOverlayStyle.light,
-        backgroundColor: RallyColors.primaryBackground,
-        elevation: 0,
-      ),
+      appBarTheme: const AppBarTheme(brightness: Brightness.dark, elevation: 0),
       scaffoldBackgroundColor: RallyColors.primaryBackground,
+      primaryColor: RallyColors.primaryBackground,
       focusColor: RallyColors.focusColor,
       textTheme: _buildRallyTextTheme(base.textTheme),
       inputDecorationTheme: const InputDecorationTheme(
@@ -76,30 +72,27 @@ class RallyApp extends StatelessWidget {
         focusedBorder: InputBorder.none,
       ),
       visualDensity: VisualDensity.standard,
-      colorScheme: base.colorScheme.copyWith(
-        primary: RallyColors.primaryBackground,
-      ),
     );
   }
 
   TextTheme _buildRallyTextTheme(TextTheme base) {
     return base
         .copyWith(
-          bodyMedium: GoogleFonts.robotoCondensed(
+          bodyText2: GoogleFonts.robotoCondensed(
             fontSize: 14,
             fontWeight: FontWeight.w400,
             letterSpacing: letterSpacingOrNone(0.5),
           ),
-          bodyLarge: GoogleFonts.eczar(
+          bodyText1: GoogleFonts.eczar(
             fontSize: 40,
             fontWeight: FontWeight.w400,
             letterSpacing: letterSpacingOrNone(1.4),
           ),
-          labelLarge: GoogleFonts.robotoCondensed(
+          button: GoogleFonts.robotoCondensed(
             fontWeight: FontWeight.w700,
             letterSpacing: letterSpacingOrNone(2.8),
           ),
-          headlineSmall: GoogleFonts.eczar(
+          headline5: GoogleFonts.eczar(
             fontSize: 40,
             fontWeight: FontWeight.w600,
             letterSpacing: letterSpacingOrNone(1.4),

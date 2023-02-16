@@ -18,10 +18,10 @@ const _startColumnWidth = 60.0;
 const _ordinalSortKeyName = 'shopping_cart';
 
 class ShoppingCartPage extends StatefulWidget {
-  const ShoppingCartPage({super.key});
+  const ShoppingCartPage({Key key}) : super(key: key);
 
   @override
-  State<ShoppingCartPage> createState() => _ShoppingCartPageState();
+  _ShoppingCartPageState createState() => _ShoppingCartPageState();
 }
 
 class _ShoppingCartPageState extends State<ShoppingCartPage> {
@@ -47,8 +47,6 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
       body: SafeArea(
         child: ScopedModelDescendant<AppStateModel>(
           builder: (context, child, model) {
-            final localizations = GalleryLocalizations.of(context)!;
-            final expandingBottomSheet = ExpandingBottomSheet.of(context);
             return Stack(
               children: [
                 ListView(
@@ -62,18 +60,22 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                             width: _startColumnWidth,
                             child: IconButton(
                               icon: const Icon(Icons.keyboard_arrow_down),
-                              onPressed: () => expandingBottomSheet!.close(),
-                              tooltip: localizations.shrineTooltipCloseCart,
+                              onPressed: () =>
+                                  ExpandingBottomSheet.of(context).close(),
+                              tooltip: GalleryLocalizations.of(context)
+                                  .shrineTooltipCloseCart,
                             ),
                           ),
                           Text(
-                            localizations.shrineCartPageCaption,
-                            style: localTheme.textTheme.titleMedium!
+                            GalleryLocalizations.of(context)
+                                .shrineCartPageCaption,
+                            style: localTheme.textTheme.subtitle1
                                 .copyWith(fontWeight: FontWeight.w600),
                           ),
                           const SizedBox(width: 16),
                           Text(
-                            localizations.shrineCartItemCount(
+                            GalleryLocalizations.of(context)
+                                .shrineCartItemCount(
                               model.totalCartQuantity,
                             ),
                           ),
@@ -107,16 +109,17 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
                         shape: const BeveledRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(7)),
                         ),
-                        backgroundColor: shrinePink100,
+                        primary: shrinePink100,
                       ),
                       onPressed: () {
                         model.clearCart();
-                        expandingBottomSheet!.close();
+                        ExpandingBottomSheet.of(context).close();
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         child: Text(
-                          localizations.shrineCartClearButtonCaption,
+                          GalleryLocalizations.of(context)
+                              .shrineCartClearButtonCaption,
                           style: TextStyle(
                               letterSpacing:
                                   letterSpacingOrNone(largeLetterSpacing)),
@@ -135,26 +138,22 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
 }
 
 class ShoppingCartSummary extends StatelessWidget {
-  const ShoppingCartSummary({
-    super.key,
-    required this.model,
-  });
+  const ShoppingCartSummary({Key key, this.model}) : super(key: key);
 
   final AppStateModel model;
 
   @override
   Widget build(BuildContext context) {
     final smallAmountStyle =
-        Theme.of(context).textTheme.bodyMedium!.copyWith(color: shrineBrown600);
+        Theme.of(context).textTheme.bodyText2.copyWith(color: shrineBrown600);
     final largeAmountStyle = Theme.of(context)
         .textTheme
-        .headlineMedium!
+        .headline4
         .copyWith(letterSpacing: letterSpacingOrNone(mediumLetterSpacing));
     final formatter = NumberFormat.simpleCurrency(
       decimalDigits: 2,
       locale: Localizations.localeOf(context).toString(),
     );
-    final localizations = GalleryLocalizations.of(context)!;
 
     return Row(
       children: [
@@ -168,11 +167,11 @@ class ShoppingCartSummary extends StatelessWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SelectableText(
-                        localizations.shrineCartTotalCaption,
+                      Text(
+                        GalleryLocalizations.of(context).shrineCartTotalCaption,
                       ),
                       Expanded(
-                        child: SelectableText(
+                        child: Text(
                           formatter.format(model.totalCost),
                           style: largeAmountStyle,
                           textAlign: TextAlign.end,
@@ -185,11 +184,12 @@ class ShoppingCartSummary extends StatelessWidget {
                 MergeSemantics(
                   child: Row(
                     children: [
-                      SelectableText(
-                        localizations.shrineCartSubtotalCaption,
+                      Text(
+                        GalleryLocalizations.of(context)
+                            .shrineCartSubtotalCaption,
                       ),
                       Expanded(
-                        child: SelectableText(
+                        child: Text(
                           formatter.format(model.subtotalCost),
                           style: smallAmountStyle,
                           textAlign: TextAlign.end,
@@ -202,11 +202,12 @@ class ShoppingCartSummary extends StatelessWidget {
                 MergeSemantics(
                   child: Row(
                     children: [
-                      SelectableText(
-                        localizations.shrineCartShippingCaption,
+                      Text(
+                        GalleryLocalizations.of(context)
+                            .shrineCartShippingCaption,
                       ),
                       Expanded(
-                        child: SelectableText(
+                        child: Text(
                           formatter.format(model.shippingCost),
                           style: smallAmountStyle,
                           textAlign: TextAlign.end,
@@ -219,11 +220,11 @@ class ShoppingCartSummary extends StatelessWidget {
                 MergeSemantics(
                   child: Row(
                     children: [
-                      SelectableText(
-                        localizations.shrineCartTaxCaption,
+                      Text(
+                        GalleryLocalizations.of(context).shrineCartTaxCaption,
                       ),
                       Expanded(
-                        child: SelectableText(
+                        child: Text(
                           formatter.format(model.tax),
                           style: smallAmountStyle,
                           textAlign: TextAlign.end,
@@ -243,15 +244,15 @@ class ShoppingCartSummary extends StatelessWidget {
 
 class ShoppingCartRow extends StatelessWidget {
   const ShoppingCartRow({
-    super.key,
-    required this.product,
-    required this.quantity,
+    Key key,
+    @required this.product,
+    @required this.quantity,
     this.onPressed,
-  });
+  }) : super(key: key);
 
   final Product product;
-  final int? quantity;
-  final VoidCallback? onPressed;
+  final int quantity;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -261,8 +262,6 @@ class ShoppingCartRow extends StatelessWidget {
     );
     final localTheme = Theme.of(context);
 
-    final localizations = GalleryLocalizations.of(context)!;
-
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(
@@ -271,7 +270,7 @@ class ShoppingCartRow extends StatelessWidget {
         children: [
           Semantics(
             container: true,
-            label: localizations
+            label: GalleryLocalizations.of(context)
                 .shrineScreenReaderRemoveProductButton(product.name(context)),
             button: true,
             enabled: true,
@@ -281,7 +280,8 @@ class ShoppingCartRow extends StatelessWidget {
                 child: IconButton(
                   icon: const Icon(Icons.remove_circle_outline),
                   onPressed: onPressed,
-                  tooltip: localizations.shrineTooltipRemoveItem,
+                  tooltip:
+                      GalleryLocalizations.of(context).shrineTooltipRemoveItem,
                 ),
               ),
             ),
@@ -312,22 +312,23 @@ class ShoppingCartRow extends StatelessWidget {
                                 child: Row(
                                   children: [
                                     Expanded(
-                                      child: SelectableText(
-                                        localizations
-                                            .shrineProductQuantity(quantity!),
+                                      child: Text(
+                                        GalleryLocalizations.of(context)
+                                            .shrineProductQuantity(quantity),
                                       ),
                                     ),
-                                    SelectableText(
-                                      localizations.shrineProductPrice(
+                                    Text(
+                                      GalleryLocalizations.of(context)
+                                          .shrineProductPrice(
                                         formatter.format(product.price),
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                              SelectableText(
+                              Text(
                                 product.name(context),
-                                style: localTheme.textTheme.titleMedium!
+                                style: localTheme.textTheme.subtitle1
                                     .copyWith(fontWeight: FontWeight.w600),
                               ),
                             ],

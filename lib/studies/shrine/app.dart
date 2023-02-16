@@ -21,23 +21,23 @@ import 'package:gallery/studies/shrine/theme.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class ShrineApp extends StatefulWidget {
-  const ShrineApp({super.key});
+  const ShrineApp({Key key}) : super(key: key);
 
   static const String loginRoute = routes.loginRoute;
   static const String homeRoute = routes.homeRoute;
 
   @override
-  State<ShrineApp> createState() => _ShrineAppState();
+  _ShrineAppState createState() => _ShrineAppState();
 }
 
 class _ShrineAppState extends State<ShrineApp>
     with TickerProviderStateMixin, RestorationMixin {
   // Controller to coordinate both the opening/closing of backdrop and sliding
   // of expanding bottom sheet
-  late AnimationController _controller;
+  AnimationController _controller;
 
   // Animation Controller for expanding/collapsing the cart menu.
-  late AnimationController _expandingController;
+  AnimationController _expandingController;
 
   final _RestorableAppStateModel _model = _RestorableAppStateModel();
   final RestorableDouble _expandingTabIndex = RestorableDouble(0);
@@ -48,7 +48,7 @@ class _ShrineAppState extends State<ShrineApp>
   String get restorationId => 'shrine_app_state';
 
   @override
-  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+  void restoreState(RestorationBucket oldBucket, bool initialRestore) {
     registerForRestoration(_model, 'app_state_model');
     registerForRestoration(_tabIndex, 'tab_index');
     registerForRestoration(
@@ -103,7 +103,7 @@ class _ShrineAppState extends State<ShrineApp>
       frontLayer: const ProductPage(),
       backLayer: CategoryMenuPage(onCategoryTap: () => _controller.forward()),
       frontTitle: const Text('SHRINE'),
-      backTitle: Text(GalleryLocalizations.of(context)!.shrineMenuCaption),
+      backTitle: Text(GalleryLocalizations.of(context).shrineMenuCaption),
       controller: _controller,
     );
   }
@@ -129,21 +129,19 @@ class _ShrineAppState extends State<ShrineApp>
 
   @override
   Widget build(BuildContext context) {
+    final isDesktop = isDisplayDesktop(context);
+    final backdrop = isDesktop ? desktopBackdrop() : mobileBackdrop();
     final Widget home = LayoutCache(
       layouts: _layouts,
       child: PageStatus(
         menuController: _controller,
         cartController: _expandingController,
-        child: LayoutBuilder(
-          builder: (context, constraints) => HomePage(
-            backdrop: isDisplayDesktop(context)
-                ? desktopBackdrop()
-                : mobileBackdrop(),
-            scrim: Scrim(controller: _expandingController),
-            expandingBottomSheet: ExpandingBottomSheet(
-              hideController: _controller,
-              expandingController: _expandingController,
-            ),
+        child: HomePage(
+          backdrop: backdrop,
+          scrim: Scrim(controller: _expandingController),
+          expandingBottomSheet: ExpandingBottomSheet(
+            hideController: _controller,
+            expandingController: _expandingController,
           ),
         ),
       ),
@@ -154,12 +152,6 @@ class _ShrineAppState extends State<ShrineApp>
       child: WillPopScope(
         onWillPop: _onWillPop,
         child: MaterialApp(
-          // By default on desktop, scrollbars are applied by the
-          // ScrollBehavior. This overrides that. All vertical scrollables in
-          // the gallery need to be audited before enabling this feature,
-          // see https://github.com/flutter/gallery/issues/541
-          scrollBehavior:
-              const MaterialScrollBehavior().copyWith(scrollbars: false),
           restorationScopeId: 'shrineApp',
           title: 'Shrine',
           debugShowCheckedModeBanner: false,
@@ -186,7 +178,7 @@ class _RestorableAppStateModel extends RestorableListenable<AppStateModel> {
   AppStateModel createDefaultValue() => AppStateModel()..loadProducts();
 
   @override
-  AppStateModel fromPrimitives(Object? data) {
+  AppStateModel fromPrimitives(Object data) {
     final appState = AppStateModel()..loadProducts();
     final appData = Map<String, dynamic>.from(data as Map);
 

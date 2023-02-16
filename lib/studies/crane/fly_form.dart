@@ -9,10 +9,10 @@ import 'package:gallery/studies/crane/backlayer.dart';
 import 'package:gallery/studies/crane/header_form.dart';
 
 class FlyForm extends BackLayerItem {
-  const FlyForm({super.key}) : super(index: 0);
+  const FlyForm({Key key}) : super(key: key, index: 0);
 
   @override
-  State<FlyForm> createState() => _FlyFormState();
+  _FlyFormState createState() => _FlyFormState();
 }
 
 class _FlyFormState extends State<FlyForm> with RestorationMixin {
@@ -25,7 +25,7 @@ class _FlyFormState extends State<FlyForm> with RestorationMixin {
   String get restorationId => 'fly_form';
 
   @override
-  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+  void restoreState(RestorationBucket oldBucket, bool initialRestore) {
     registerForRestoration(travelerController, 'diner_controller');
     registerForRestoration(countryDestinationController, 'date_controller');
     registerForRestoration(destinationController, 'time_controller');
@@ -43,31 +43,30 @@ class _FlyFormState extends State<FlyForm> with RestorationMixin {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = GalleryLocalizations.of(context)!;
     return HeaderForm(
       fields: <HeaderFormField>[
         HeaderFormField(
           index: 0,
           iconData: Icons.person,
-          title: localizations.craneFormTravelers,
+          title: GalleryLocalizations.of(context).craneFormTravelers,
           textController: travelerController.value,
         ),
         HeaderFormField(
           index: 1,
           iconData: Icons.place,
-          title: localizations.craneFormOrigin,
+          title: GalleryLocalizations.of(context).craneFormOrigin,
           textController: countryDestinationController.value,
         ),
         HeaderFormField(
           index: 2,
           iconData: Icons.airplanemode_active,
-          title: localizations.craneFormDestination,
+          title: GalleryLocalizations.of(context).craneFormDestination,
           textController: destinationController.value,
         ),
         HeaderFormField(
           index: 3,
           iconData: Icons.date_range,
-          title: localizations.craneFormDates,
+          title: GalleryLocalizations.of(context).craneFormDates,
           textController: dateController.value,
         ),
       ],

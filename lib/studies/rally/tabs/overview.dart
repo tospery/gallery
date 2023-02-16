@@ -7,6 +7,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_gen/gen_l10n/gallery_localizations.dart';
+
 import 'package:gallery/data/gallery_options.dart';
 import 'package:gallery/layout/adaptive.dart';
 import 'package:gallery/layout/text_scale.dart';
@@ -17,10 +18,10 @@ import 'package:gallery/studies/rally/formatters.dart';
 
 /// A page that shows a status overview.
 class OverviewView extends StatefulWidget {
-  const OverviewView({super.key});
+  const OverviewView({Key key}) : super(key: key);
 
   @override
-  State<OverviewView> createState() => _OverviewViewState();
+  _OverviewViewState createState() => _OverviewViewState();
 }
 
 class _OverviewViewState extends State<OverviewView> {
@@ -80,7 +81,7 @@ class _OverviewViewState extends State<OverviewView> {
 }
 
 class _OverviewGrid extends StatelessWidget {
-  const _OverviewGrid({required this.spacing});
+  const _OverviewGrid({Key key, @required this.spacing}) : super(key: key);
 
   final double spacing;
 
@@ -89,7 +90,6 @@ class _OverviewGrid extends StatelessWidget {
     final accountDataList = DummyDataService.getAccountDataList(context);
     final billDataList = DummyDataService.getBillDataList(context);
     final budgetDataList = DummyDataService.getBudgetDataList(context);
-    final localizations = GalleryLocalizations.of(context)!;
 
     return LayoutBuilder(builder: (context, constraints) {
       final textScaleFactor =
@@ -111,11 +111,12 @@ class _OverviewGrid extends StatelessWidget {
           SizedBox(
             width: boxWidth,
             child: _FinancialView(
-              title: localizations.rallyAccounts,
+              title: GalleryLocalizations.of(context).rallyAccounts,
               total: sumAccountDataPrimaryAmount(accountDataList),
               financialItemViews:
                   buildAccountDataListViews(accountDataList, context),
-              buttonSemanticsLabel: localizations.rallySeeAllAccounts,
+              buttonSemanticsLabel:
+                  GalleryLocalizations.of(context).rallySeeAllAccounts,
               order: 1,
             ),
           ),
@@ -123,19 +124,21 @@ class _OverviewGrid extends StatelessWidget {
           SizedBox(
             width: boxWidth,
             child: _FinancialView(
-              title: localizations.rallyBills,
+              title: GalleryLocalizations.of(context).rallyBills,
               total: sumBillDataPrimaryAmount(billDataList),
               financialItemViews: buildBillDataListViews(billDataList, context),
-              buttonSemanticsLabel: localizations.rallySeeAllBills,
+              buttonSemanticsLabel:
+                  GalleryLocalizations.of(context).rallySeeAllBills,
               order: 2,
             ),
           ),
           _FinancialView(
-            title: localizations.rallyBudgets,
+            title: GalleryLocalizations.of(context).rallyBudgets,
             total: sumBudgetDataPrimaryAmount(budgetDataList),
             financialItemViews:
                 buildBudgetDataListViews(budgetDataList, context),
-            buttonSemanticsLabel: localizations.rallySeeAllBudgets,
+            buttonSemanticsLabel:
+                GalleryLocalizations.of(context).rallySeeAllBudgets,
             order: 3,
           ),
         ],
@@ -145,14 +148,13 @@ class _OverviewGrid extends StatelessWidget {
 }
 
 class _AlertsView extends StatelessWidget {
-  const _AlertsView({this.alerts});
+  const _AlertsView({Key key, this.alerts}) : super(key: key);
 
-  final List<AlertData>? alerts;
+  final List<AlertData> alerts;
 
   @override
   Widget build(BuildContext context) {
     final isDesktop = isDisplayDesktop(context);
-    final localizations = GalleryLocalizations.of(context)!;
 
     return Container(
       padding: const EdgeInsetsDirectional.only(start: 16, top: 4, bottom: 4),
@@ -168,20 +170,18 @@ class _AlertsView extends StatelessWidget {
                 alignment: WrapAlignment.spaceBetween,
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
-                  Text(localizations.rallyAlerts),
+                  Text(GalleryLocalizations.of(context).rallyAlerts),
                   if (!isDesktop)
                     TextButton(
-                      style: TextButton.styleFrom(
-                        foregroundColor: Colors.white,
-                      ),
+                      style: TextButton.styleFrom(primary: Colors.white),
                       onPressed: () {},
-                      child: Text(localizations.rallySeeAll),
+                      child: Text(GalleryLocalizations.of(context).rallySeeAll),
                     ),
                 ],
               ),
             ),
           ),
-          for (AlertData alert in alerts!) ...[
+          for (AlertData alert in alerts) ...[
             Container(color: RallyColors.primaryBackground, height: 1),
             _Alert(alert: alert),
           ]
@@ -192,7 +192,10 @@ class _AlertsView extends StatelessWidget {
 }
 
 class _Alert extends StatelessWidget {
-  const _Alert({required this.alert});
+  const _Alert({
+    Key key,
+    @required this.alert,
+  }) : super(key: key);
 
   final AlertData alert;
 
@@ -207,7 +210,7 @@ class _Alert extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: SelectableText(alert.message!),
+              child: Text(alert.message),
             ),
             SizedBox(
               width: 100,
@@ -235,17 +238,17 @@ class _FinancialView extends StatelessWidget {
     this.order,
   });
 
-  final String? title;
-  final String? buttonSemanticsLabel;
-  final double? total;
-  final List<FinancialEntityCategoryView>? financialItemViews;
-  final double? order;
+  final String title;
+  final String buttonSemanticsLabel;
+  final double total;
+  final List<FinancialEntityCategoryView> financialItemViews;
+  final double order;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return FocusTraversalOrder(
-      order: NumericFocusOrder(order!),
+      order: NumericFocusOrder(order),
       child: Container(
         color: RallyColors.cardBackground,
         child: Column(
@@ -261,13 +264,13 @@ class _FinancialView extends StatelessWidget {
                       left: 16,
                       right: 16,
                     ),
-                    child: SelectableText(title!),
+                    child: Text(title),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 16, right: 16),
-                    child: SelectableText(
+                    child: Text(
                       usdWithSignFormat(context).format(total),
-                      style: theme.textTheme.bodyLarge!.copyWith(
+                      style: theme.textTheme.bodyText1.copyWith(
                         fontSize: 44 / reducedTextScale(context),
                         fontWeight: FontWeight.w600,
                       ),
@@ -276,13 +279,13 @@ class _FinancialView extends StatelessWidget {
                 ],
               ),
             ),
-            ...financialItemViews!
-                .sublist(0, math.min(financialItemViews!.length, 3)),
+            ...financialItemViews.sublist(
+                0, math.min(financialItemViews.length, 3)),
             TextButton(
-              style: TextButton.styleFrom(foregroundColor: Colors.white),
+              style: TextButton.styleFrom(primary: Colors.white),
               onPressed: () {},
               child: Text(
-                GalleryLocalizations.of(context)!.rallySeeAll,
+                GalleryLocalizations.of(context).rallySeeAll,
                 semanticsLabel: buttonSemanticsLabel,
               ),
             ),

@@ -10,14 +10,14 @@ import 'package:flutter/services.dart';
 /// Wrap your widget as [child] of a [HighlightFocus] widget.
 class HighlightFocus extends StatefulWidget {
   const HighlightFocus({
-    super.key,
-    required this.onPressed,
-    required this.child,
+    Key key,
+    @required this.onPressed,
+    @required this.child,
     this.highlightColor,
     this.borderColor,
     this.hasFocus = true,
     this.debugLabel,
-  });
+  }) : super(key: key);
 
   /// [onPressed] is called when you press space, enter, or numpad-enter
   /// when the widget is focused.
@@ -30,23 +30,23 @@ class HighlightFocus extends StatefulWidget {
   /// is focused.
   /// Use [Colors.transparent] if you do not want one.
   /// Use an opacity less than 1 to make the underlying widget visible.
-  final Color? highlightColor;
+  final Color highlightColor;
 
   /// [borderColor] is the color of the border when the widget is focused.
-  final Color? borderColor;
+  final Color borderColor;
 
   /// [hasFocus] is true when focusing on the widget is allowed.
   /// Set to false if you want the child to skip focus.
   final bool hasFocus;
 
-  final String? debugLabel;
+  final String debugLabel;
 
   @override
-  State<HighlightFocus> createState() => _HighlightFocusState();
+  _HighlightFocusState createState() => _HighlightFocusState();
 }
 
 class _HighlightFocusState extends State<HighlightFocus> {
-  late bool isFocused;
+  bool isFocused;
 
   @override
   void initState() {
@@ -56,15 +56,15 @@ class _HighlightFocusState extends State<HighlightFocus> {
 
   @override
   Widget build(BuildContext context) {
-    final highlightColor = widget.highlightColor ??
+    final _highlightColor = widget.highlightColor ??
         Theme.of(context).colorScheme.primary.withOpacity(0.5);
-    final borderColor =
+    final _borderColor =
         widget.borderColor ?? Theme.of(context).colorScheme.onPrimary;
 
-    final highlightedDecoration = BoxDecoration(
-      color: highlightColor,
+    final _highlightedDecoration = BoxDecoration(
+      color: _highlightColor,
       border: Border.all(
-        color: borderColor,
+        color: _borderColor,
         width: 2,
       ),
     );
@@ -89,7 +89,7 @@ class _HighlightFocusState extends State<HighlightFocus> {
         }
       },
       child: Container(
-        foregroundDecoration: isFocused ? highlightedDecoration : null,
+        foregroundDecoration: isFocused ? _highlightedDecoration : null,
         child: widget.child,
       ),
     );

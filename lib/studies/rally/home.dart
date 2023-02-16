@@ -18,22 +18,22 @@ const int turnsToRotateRight = 1;
 const int turnsToRotateLeft = 3;
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({Key key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin, RestorationMixin {
-  late TabController _tabController;
+  TabController _tabController;
   RestorableInt tabIndex = RestorableInt(0);
 
   @override
   String get restorationId => 'home_page';
 
   @override
-  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+  void restoreState(RestorationBucket oldBucket, bool initialRestore) {
     registerForRestoration(tabIndex, 'tab_index');
     _tabController.index = tabIndex.value;
   }
@@ -172,15 +172,12 @@ class _HomePageState extends State<HomePage>
   }
 
   List<Widget> _buildTabs(
-      {required BuildContext context,
-      required ThemeData theme,
-      bool isVertical = false}) {
-    final localizations = GalleryLocalizations.of(context)!;
+      {BuildContext context, ThemeData theme, bool isVertical = false}) {
     return [
       _RallyTab(
         theme: theme,
         iconData: Icons.pie_chart,
-        title: localizations.rallyTitleOverview,
+        title: GalleryLocalizations.of(context).rallyTitleOverview,
         tabIndex: 0,
         tabController: _tabController,
         isVertical: isVertical,
@@ -188,7 +185,7 @@ class _HomePageState extends State<HomePage>
       _RallyTab(
         theme: theme,
         iconData: Icons.attach_money,
-        title: localizations.rallyTitleAccounts,
+        title: GalleryLocalizations.of(context).rallyTitleAccounts,
         tabIndex: 1,
         tabController: _tabController,
         isVertical: isVertical,
@@ -196,7 +193,7 @@ class _HomePageState extends State<HomePage>
       _RallyTab(
         theme: theme,
         iconData: Icons.money_off,
-        title: localizations.rallyTitleBills,
+        title: GalleryLocalizations.of(context).rallyTitleBills,
         tabIndex: 2,
         tabController: _tabController,
         isVertical: isVertical,
@@ -204,7 +201,7 @@ class _HomePageState extends State<HomePage>
       _RallyTab(
         theme: theme,
         iconData: Icons.table_chart,
-        title: localizations.rallyTitleBudgets,
+        title: GalleryLocalizations.of(context).rallyTitleBudgets,
         tabIndex: 3,
         tabController: _tabController,
         isVertical: isVertical,
@@ -212,7 +209,7 @@ class _HomePageState extends State<HomePage>
       _RallyTab(
         theme: theme,
         iconData: Icons.settings,
-        title: localizations.rallyTitleSettings,
+        title: GalleryLocalizations.of(context).rallyTitleSettings,
         tabIndex: 4,
         tabController: _tabController,
         isVertical: isVertical,
@@ -232,13 +229,11 @@ class _HomePageState extends State<HomePage>
 }
 
 class _RallyTabBar extends StatelessWidget {
-  const _RallyTabBar({
-    required this.tabs,
-    this.tabController,
-  });
+  const _RallyTabBar({Key key, this.tabs, this.tabController})
+      : super(key: key);
 
   final List<Widget> tabs;
-  final TabController? tabController;
+  final TabController tabController;
 
   @override
   Widget build(BuildContext context) {
@@ -261,13 +256,13 @@ class _RallyTabBar extends StatelessWidget {
 
 class _RallyTab extends StatefulWidget {
   _RallyTab({
-    required ThemeData theme,
-    IconData? iconData,
-    required String title,
-    int? tabIndex,
-    required TabController tabController,
-    required this.isVertical,
-  })  : titleText = Text(title, style: theme.textTheme.labelLarge),
+    ThemeData theme,
+    IconData iconData,
+    String title,
+    int tabIndex,
+    TabController tabController,
+    this.isVertical,
+  })  : titleText = Text(title, style: theme.textTheme.button),
         isExpanded = tabController.index == tabIndex,
         icon = Icon(iconData, semanticLabel: title);
 
@@ -282,10 +277,10 @@ class _RallyTab extends StatefulWidget {
 
 class _RallyTabState extends State<_RallyTab>
     with SingleTickerProviderStateMixin {
-  late Animation<double> _titleSizeAnimation;
-  late Animation<double> _titleFadeAnimation;
-  late Animation<double> _iconFadeAnimation;
-  late AnimationController _controller;
+  Animation<double> _titleSizeAnimation;
+  Animation<double> _titleFadeAnimation;
+  Animation<double> _iconFadeAnimation;
+  AnimationController _controller;
 
   @override
   void initState() {

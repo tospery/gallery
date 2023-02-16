@@ -8,15 +8,14 @@ import 'package:flutter_gen/gen_l10n/gallery_localizations.dart';
 // BEGIN tooltipDemo
 
 class TooltipDemo extends StatelessWidget {
-  const TooltipDemo({super.key});
+  const TooltipDemo({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final localizations = GalleryLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text(localizations.demoTooltipTitle),
+        title: Text(GalleryLocalizations.of(context).demoTooltipTitle),
       ),
       body: Center(
         child: Padding(
@@ -25,12 +24,13 @@ class TooltipDemo extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                localizations.demoTooltipInstructions,
+                GalleryLocalizations.of(context).demoTooltipInstructions,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
               Tooltip(
-                message: localizations.starterAppTooltipSearch,
+                message:
+                    GalleryLocalizations.of(context).starterAppTooltipSearch,
                 child: IconButton(
                   color: Theme.of(context).colorScheme.primary,
                   onPressed: () {},

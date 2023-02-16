@@ -10,17 +10,16 @@ import 'package:gallery/demos/material/material_demo_types.dart';
 // BEGIN listDemo
 
 class ListDemo extends StatelessWidget {
-  const ListDemo({super.key, required this.type});
+  const ListDemo({Key key, this.type}) : super(key: key);
 
   final ListDemoType type;
 
   @override
   Widget build(BuildContext context) {
-    final localizations = GalleryLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text(localizations.demoListsTitle),
+        title: Text(GalleryLocalizations.of(context).demoListsTitle),
       ),
       body: Scrollbar(
         child: ListView(
@@ -33,10 +32,10 @@ class ListDemo extends StatelessWidget {
                   child: CircleAvatar(child: Text('$index')),
                 ),
                 title: Text(
-                  localizations.demoBottomSheetItem(index),
+                  GalleryLocalizations.of(context).demoBottomSheetItem(index),
                 ),
                 subtitle: type == ListDemoType.twoLine
-                    ? Text(localizations.demoListsSecondary)
+                    ? Text(GalleryLocalizations.of(context).demoListsSecondary)
                     : null,
               ),
           ],

@@ -8,16 +8,18 @@ import 'package:gallery/layout/adaptive.dart';
 
 class PageStatus extends InheritedWidget {
   const PageStatus({
-    super.key,
-    required this.cartController,
-    required this.menuController,
-    required super.child,
-  });
+    Key key,
+    @required this.cartController,
+    @required this.menuController,
+    @required Widget child,
+  })  : assert(cartController != null),
+        assert(menuController != null),
+        super(key: key, child: child);
 
   final AnimationController cartController;
   final AnimationController menuController;
 
-  static PageStatus? of(BuildContext context) {
+  static PageStatus of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<PageStatus>();
   }
 
@@ -42,9 +44,9 @@ bool cartPageIsVisible(BuildContext context) {
 }
 
 AnimationController _cartControllerOf(BuildContext context) {
-  return PageStatus.of(context)!.cartController;
+  return PageStatus.of(context).cartController;
 }
 
 AnimationController _menuControllerOf(BuildContext context) {
-  return PageStatus.of(context)!.menuController;
+  return PageStatus.of(context).menuController;
 }

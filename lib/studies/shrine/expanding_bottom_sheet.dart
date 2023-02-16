@@ -48,20 +48,25 @@ double _paddedThumbnailHeight(BuildContext context) {
 
 class ExpandingBottomSheet extends StatefulWidget {
   const ExpandingBottomSheet({
-    super.key,
-    required this.hideController,
-    required this.expandingController,
-  });
+    Key key,
+    @required this.hideController,
+    @required this.expandingController,
+  })  : assert(hideController != null),
+        assert(expandingController != null),
+        super(key: key);
 
   final AnimationController hideController;
   final AnimationController expandingController;
 
   @override
-  ExpandingBottomSheetState createState() => ExpandingBottomSheetState();
+  _ExpandingBottomSheetState createState() => _ExpandingBottomSheetState();
 
-  static ExpandingBottomSheetState? of(BuildContext context,
+  static _ExpandingBottomSheetState of(BuildContext context,
       {bool isNullOk = false}) {
-    final result = context.findAncestorStateOfType<ExpandingBottomSheetState>();
+    assert(isNullOk != null);
+    assert(context != null);
+    final result =
+        context.findAncestorStateOfType<_ExpandingBottomSheetState>();
     if (isNullOk || result != null) {
       return result;
     }
@@ -76,11 +81,11 @@ class ExpandingBottomSheet extends StatefulWidget {
 // curve formula. It's quintic, not cubic. But it _can_ be expressed as one
 // curve followed by another, which we do here.
 Animation<T> _getEmphasizedEasingAnimation<T>({
-  required T begin,
-  required T peak,
-  required T end,
-  required bool isForward,
-  required Animation<double> parent,
+  @required T begin,
+  @required T peak,
+  @required T end,
+  @required bool isForward,
+  @required Animation<double> parent,
 }) {
   Curve firstCurve;
   Curve secondCurve;
@@ -121,11 +126,11 @@ Animation<T> _getEmphasizedEasingAnimation<T>({
 
 // Calculates the value where two double Animations should be joined. Used by
 // callers of _getEmphasisedEasing<double>().
-double _getPeakPoint({required double begin, required double end}) {
+double _getPeakPoint({double begin, double end}) {
   return begin + (end - begin) * _peakVelocityProgress;
 }
 
-class ExpandingBottomSheetState extends State<ExpandingBottomSheet> {
+class _ExpandingBottomSheetState extends State<ExpandingBottomSheet> {
   final GlobalKey _expandingBottomSheetKey =
       GlobalKey(debugLabel: 'Expanding bottom sheet');
 
@@ -139,14 +144,14 @@ class ExpandingBottomSheetState extends State<ExpandingBottomSheet> {
   AnimationController get _controller => widget.expandingController;
 
   // Animations for the opening and closing of the ExpandingBottomSheet
-  late Animation<double> _widthAnimation;
-  late Animation<double> _heightAnimation;
-  late Animation<double> _thumbnailOpacityAnimation;
-  late Animation<double> _cartOpacityAnimation;
-  late Animation<double> _topStartShapeAnimation;
-  late Animation<double> _bottomStartShapeAnimation;
-  late Animation<Offset> _slideAnimation;
-  late Animation<double> _gapAnimation;
+  Animation<double> _widthAnimation;
+  Animation<double> _heightAnimation;
+  Animation<double> _thumbnailOpacityAnimation;
+  Animation<double> _cartOpacityAnimation;
+  Animation<double> _topStartShapeAnimation;
+  Animation<double> _bottomStartShapeAnimation;
+  Animation<Offset> _slideAnimation;
+  Animation<double> _gapAnimation;
 
   Animation<double> _getWidthAnimation(double screenWidth) {
     if (_controller.status == AnimationStatus.forward) {
@@ -198,25 +203,25 @@ class ExpandingBottomSheetState extends State<ExpandingBottomSheet> {
   }
 
   Animation<double> _getDesktopGapAnimation(double gapHeight) {
-    final collapsedGapHeight = gapHeight;
-    const expandedGapHeight = 0.0;
+    final _collapsedGapHeight = gapHeight;
+    const _expandedGapHeight = 0.0;
 
     if (_controller.status == AnimationStatus.forward) {
       // Opening animation
 
       return _getEmphasizedEasingAnimation(
-        begin: collapsedGapHeight,
-        peak: collapsedGapHeight +
-            (expandedGapHeight - collapsedGapHeight) * _peakVelocityProgress,
-        end: expandedGapHeight,
+        begin: _collapsedGapHeight,
+        peak: _collapsedGapHeight +
+            (_expandedGapHeight - _collapsedGapHeight) * _peakVelocityProgress,
+        end: _expandedGapHeight,
         isForward: true,
         parent: _controller.view,
       );
     } else {
       // Closing animation
       return Tween<double>(
-        begin: collapsedGapHeight,
-        end: expandedGapHeight,
+        begin: _collapsedGapHeight,
+        end: _expandedGapHeight,
       ).animate(
         CurvedAnimation(
           parent: _controller.view,
@@ -501,15 +506,12 @@ class ExpandingBottomSheetState extends State<ExpandingBottomSheet> {
         ? Semantics(
             button: true,
             enabled: true,
-            label: GalleryLocalizations.of(context)!
+            label: GalleryLocalizations.of(context)
                 .shrineScreenReaderCart(totalCartQuantity),
-            child: MouseRegion(
-              cursor: SystemMouseCursors.click,
-              child: GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: open,
-                child: child,
-              ),
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: open,
+              child: child,
             ),
           )
         : child;
@@ -567,10 +569,10 @@ class ExpandingBottomSheetState extends State<ExpandingBottomSheet> {
 }
 
 class ProductThumbnailRow extends StatefulWidget {
-  const ProductThumbnailRow({super.key});
+  const ProductThumbnailRow({Key key}) : super(key: key);
 
   @override
-  State<ProductThumbnailRow> createState() => _ProductThumbnailRowState();
+  _ProductThumbnailRowState createState() => _ProductThumbnailRowState();
 }
 
 class _ProductThumbnailRowState extends State<ProductThumbnailRow> {
@@ -578,10 +580,10 @@ class _ProductThumbnailRowState extends State<ProductThumbnailRow> {
 
   // _list represents what's currently on screen. If _internalList updates,
   // it will need to be updated to match it.
-  late _ListModel _list;
+  _ListModel _list;
 
   // _internalList represents the list as it is updated by the AppStateModel.
-  late List<int> _internalList;
+  List<int> _internalList;
 
   @override
   void initState() {
@@ -598,6 +600,7 @@ class _ProductThumbnailRowState extends State<ProductThumbnailRow> {
   Product _productWithId(int productId) {
     final model = ScopedModel.of<AppStateModel>(context);
     final product = model.getProductById(productId);
+    assert(product != null);
     return product;
   }
 
@@ -675,17 +678,15 @@ class _ProductThumbnailRowState extends State<ProductThumbnailRow> {
 
   @override
   Widget build(BuildContext context) {
+    _updateLists();
     return ScopedModelDescendant<AppStateModel>(
-      builder: (context, child, model) {
-        _updateLists();
-        return _buildAnimatedList(context);
-      },
+      builder: (context, child, model) => _buildAnimatedList(context),
     );
   }
 }
 
 class ExtraProductsNumber extends StatelessWidget {
-  const ExtraProductsNumber({super.key});
+  const ExtraProductsNumber({Key key}) : super(key: key);
 
   // Calculates the number to be displayed at the end of the row if there are
   // more than three products in the cart. This calculates overflow products,
@@ -699,7 +700,7 @@ class ExtraProductsNumber extends StatelessWidget {
     var overflow = 0;
     final numProducts = products.length;
     for (var i = _maxThumbnailCount; i < numProducts; i++) {
-      overflow += productMap[products[i]]!;
+      overflow += productMap[products[i]];
     }
     return overflow;
   }
@@ -715,7 +716,7 @@ class ExtraProductsNumber extends StatelessWidget {
         numOverflowProducts <= 99 ? numOverflowProducts : 99;
     return Text(
       '+$displayedOverflowProducts',
-      style: Theme.of(context).primaryTextTheme.labelLarge,
+      style: Theme.of(context).primaryTextTheme.button,
     );
   }
 
@@ -729,7 +730,8 @@ class ExtraProductsNumber extends StatelessWidget {
 
 class ProductThumbnail extends StatelessWidget {
   const ProductThumbnail(this.animation, this.opacityAnimation, this.product,
-      {super.key});
+      {Key key})
+      : super(key: key);
 
   final Animation<double> animation;
   final Animation<double> opacityAnimation;
@@ -768,17 +770,19 @@ class ProductThumbnail extends StatelessWidget {
 // _ListModel manipulates an internal list and an AnimatedList
 class _ListModel {
   _ListModel({
-    required this.listKey,
-    required this.removedItemBuilder,
-    Iterable<int>? initialItems,
-  }) : _items = initialItems?.toList() ?? [];
+    @required this.listKey,
+    @required this.removedItemBuilder,
+    Iterable<int> initialItems,
+  })  : assert(listKey != null),
+        assert(removedItemBuilder != null),
+        _items = initialItems?.toList() ?? [];
 
   final GlobalKey<AnimatedListState> listKey;
   final Widget Function(int, BuildContext, Animation<double>)
       removedItemBuilder;
   final List<int> _items;
 
-  AnimatedListState? get _animatedList => listKey.currentState;
+  AnimatedListState get _animatedList => listKey.currentState;
 
   void add(int product) {
     _insert(_items.length, product);
@@ -786,8 +790,8 @@ class _ListModel {
 
   void _insert(int index, int item) {
     _items.insert(index, item);
-    _animatedList!
-        .insertItem(index, duration: const Duration(milliseconds: 225));
+    _animatedList.insertItem(index,
+        duration: const Duration(milliseconds: 225));
   }
 
   void remove(int product) {
@@ -799,9 +803,11 @@ class _ListModel {
 
   void _removeAt(int index) {
     final removedItem = _items.removeAt(index);
-    _animatedList!.removeItem(index, (context, animation) {
-      return removedItemBuilder(removedItem, context, animation);
-    });
+    if (removedItem != null) {
+      _animatedList.removeItem(index, (context, animation) {
+        return removedItemBuilder(removedItem, context, animation);
+      });
+    }
   }
 
   int get length => _items.length;

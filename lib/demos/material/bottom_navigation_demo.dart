@@ -11,16 +11,16 @@ import 'package:gallery/demos/material/material_demo_types.dart';
 
 class BottomNavigationDemo extends StatefulWidget {
   const BottomNavigationDemo({
-    super.key,
-    required this.restorationId,
-    required this.type,
-  });
+    Key key,
+    @required this.restorationId,
+    @required this.type,
+  }) : super(key: key);
 
   final String restorationId;
   final BottomNavigationDemoType type;
 
   @override
-  State<BottomNavigationDemo> createState() => _BottomNavigationDemoState();
+  _BottomNavigationDemoState createState() => _BottomNavigationDemoState();
 }
 
 class _BottomNavigationDemoState extends State<BottomNavigationDemo>
@@ -31,7 +31,7 @@ class _BottomNavigationDemoState extends State<BottomNavigationDemo>
   String get restorationId => widget.restorationId;
 
   @override
-  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+  void restoreState(RestorationBucket oldBucket, bool initialRestore) {
     registerForRestoration(_currentIndex, 'bottom_navigation_tab_index');
   }
 
@@ -42,41 +42,42 @@ class _BottomNavigationDemoState extends State<BottomNavigationDemo>
   }
 
   String _title(BuildContext context) {
-    final localizations = GalleryLocalizations.of(context)!;
     switch (widget.type) {
       case BottomNavigationDemoType.withLabels:
-        return localizations.demoBottomNavigationPersistentLabels;
+        return GalleryLocalizations.of(context)
+            .demoBottomNavigationPersistentLabels;
       case BottomNavigationDemoType.withoutLabels:
-        return localizations.demoBottomNavigationSelectedLabel;
+        return GalleryLocalizations.of(context)
+            .demoBottomNavigationSelectedLabel;
     }
+    return '';
   }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
-    final localizations = GalleryLocalizations.of(context)!;
 
     var bottomNavigationBarItems = <BottomNavigationBarItem>[
       BottomNavigationBarItem(
         icon: const Icon(Icons.add_comment),
-        label: localizations.bottomNavigationCommentsTab,
+        label: GalleryLocalizations.of(context).bottomNavigationCommentsTab,
       ),
       BottomNavigationBarItem(
         icon: const Icon(Icons.calendar_today),
-        label: localizations.bottomNavigationCalendarTab,
+        label: GalleryLocalizations.of(context).bottomNavigationCalendarTab,
       ),
       BottomNavigationBarItem(
         icon: const Icon(Icons.account_circle),
-        label: localizations.bottomNavigationAccountTab,
+        label: GalleryLocalizations.of(context).bottomNavigationAccountTab,
       ),
       BottomNavigationBarItem(
         icon: const Icon(Icons.alarm_on),
-        label: localizations.bottomNavigationAlarmTab,
+        label: GalleryLocalizations.of(context).bottomNavigationAlarmTab,
       ),
       BottomNavigationBarItem(
         icon: const Icon(Icons.camera_enhance),
-        label: localizations.bottomNavigationCameraTab,
+        label: GalleryLocalizations.of(context).bottomNavigationCameraTab,
       ),
     ];
 
@@ -115,8 +116,8 @@ class _BottomNavigationDemoState extends State<BottomNavigationDemo>
         items: bottomNavigationBarItems,
         currentIndex: _currentIndex.value,
         type: BottomNavigationBarType.fixed,
-        selectedFontSize: textTheme.bodySmall!.fontSize!,
-        unselectedFontSize: textTheme.bodySmall!.fontSize!,
+        selectedFontSize: textTheme.caption.fontSize,
+        unselectedFontSize: textTheme.caption.fontSize,
         onTap: (index) {
           setState(() {
             _currentIndex.value = index;
@@ -131,10 +132,7 @@ class _BottomNavigationDemoState extends State<BottomNavigationDemo>
 }
 
 class _NavigationDestinationView extends StatelessWidget {
-  const _NavigationDestinationView({
-    super.key,
-    required this.item,
-  });
+  const _NavigationDestinationView({Key key, this.item}) : super(key: key);
 
   final BottomNavigationBarItem item;
 
@@ -163,9 +161,9 @@ class _NavigationDestinationView extends StatelessWidget {
               size: 80,
             ),
             child: Semantics(
-              label: GalleryLocalizations.of(context)!
+              label: GalleryLocalizations.of(context)
                   .bottomNavigationContentPlaceholder(
-                item.label!,
+                item.label,
               ),
               child: item.icon,
             ),

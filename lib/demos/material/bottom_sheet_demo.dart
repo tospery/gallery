@@ -9,29 +9,31 @@ import 'package:gallery/demos/material/material_demo_types.dart';
 
 class BottomSheetDemo extends StatelessWidget {
   const BottomSheetDemo({
-    super.key,
-    required this.type,
-  });
+    Key key,
+    @required this.type,
+  }) : super(key: key);
 
   final BottomSheetDemoType type;
 
   String _title(BuildContext context) {
-    final localizations = GalleryLocalizations.of(context)!;
     switch (type) {
       case BottomSheetDemoType.persistent:
-        return localizations.demoBottomSheetPersistentTitle;
+        return GalleryLocalizations.of(context).demoBottomSheetPersistentTitle;
       case BottomSheetDemoType.modal:
-        return localizations.demoBottomSheetModalTitle;
+        return GalleryLocalizations.of(context).demoBottomSheetModalTitle;
     }
+    return '';
   }
 
   Widget _bottomSheetDemo(BuildContext context) {
     switch (type) {
       case BottomSheetDemoType.persistent:
         return _PersistentBottomSheetDemo();
+        break;
       case BottomSheetDemoType.modal:
       default:
         return _ModalBottomSheetDemo();
+        break;
     }
   }
 
@@ -56,7 +58,7 @@ class BottomSheetDemo extends StatelessWidget {
               child: Icon(
                 Icons.add,
                 semanticLabel:
-                    GalleryLocalizations.of(context)!.demoBottomSheetAddLabel,
+                    GalleryLocalizations.of(context).demoBottomSheetAddLabel,
               ),
             ),
             body: _bottomSheetDemo(context),
@@ -72,7 +74,6 @@ class BottomSheetDemo extends StatelessWidget {
 class _BottomSheetContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final localizations = GalleryLocalizations.of(context)!;
     return SizedBox(
       height: 300,
       child: Column(
@@ -81,7 +82,7 @@ class _BottomSheetContent extends StatelessWidget {
             height: 70,
             child: Center(
               child: Text(
-                localizations.demoBottomSheetHeader,
+                GalleryLocalizations.of(context).demoBottomSheetHeader,
                 textAlign: TextAlign.center,
               ),
             ),
@@ -92,7 +93,8 @@ class _BottomSheetContent extends StatelessWidget {
               itemCount: 21,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text(localizations.demoBottomSheetItem(index)),
+                  title: Text(GalleryLocalizations.of(context)
+                      .demoBottomSheetItem(index)),
                 );
               },
             ),
@@ -124,8 +126,7 @@ class _ModalBottomSheetDemo extends StatelessWidget {
         onPressed: () {
           _showModalBottomSheet(context);
         },
-        child:
-            Text(GalleryLocalizations.of(context)!.demoBottomSheetButtonText),
+        child: Text(GalleryLocalizations.of(context).demoBottomSheetButtonText),
       ),
     );
   }
@@ -143,7 +144,7 @@ class _PersistentBottomSheetDemo extends StatefulWidget {
 
 class _PersistentBottomSheetDemoState
     extends State<_PersistentBottomSheetDemo> {
-  VoidCallback? _showBottomSheetCallback;
+  VoidCallback _showBottomSheetCallback;
 
   @override
   void initState() {
@@ -180,8 +181,7 @@ class _PersistentBottomSheetDemoState
     return Center(
       child: ElevatedButton(
         onPressed: _showBottomSheetCallback,
-        child:
-            Text(GalleryLocalizations.of(context)!.demoBottomSheetButtonText),
+        child: Text(GalleryLocalizations.of(context).demoBottomSheetButtonText),
       ),
     );
   }

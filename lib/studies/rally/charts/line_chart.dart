@@ -14,10 +14,9 @@ import 'package:gallery/studies/rally/formatters.dart';
 import 'package:intl/intl.dart' as intl;
 
 class RallyLineChart extends StatelessWidget {
-  const RallyLineChart({
-    super.key,
-    this.events = const <DetailedEventData>[],
-  });
+  const RallyLineChart({Key key, this.events = const <DetailedEventData>[]})
+      : assert(events != null),
+        super(key: key);
 
   final List<DetailedEventData> events;
 
@@ -28,7 +27,7 @@ class RallyLineChart extends StatelessWidget {
         dateFormat: dateFormatMonthYear(context),
         numberFormat: usdWithSignFormat(context),
         events: events,
-        labelStyle: Theme.of(context).textTheme.bodyMedium!,
+        labelStyle: Theme.of(context).textTheme.bodyText2,
         textDirection: GalleryOptions.of(context).resolvedTextDirection(),
         textScaleFactor: reducedTextScale(context),
         padding: isDisplayDesktop(context)
@@ -41,20 +40,20 @@ class RallyLineChart extends StatelessWidget {
 
 class RallyLineChartPainter extends CustomPainter {
   RallyLineChartPainter({
-    required this.dateFormat,
-    required this.numberFormat,
-    required this.events,
-    required this.labelStyle,
-    required this.textDirection,
-    required this.textScaleFactor,
-    required this.padding,
+    @required this.dateFormat,
+    @required this.numberFormat,
+    @required this.events,
+    @required this.labelStyle,
+    @required this.textDirection,
+    @required this.textScaleFactor,
+    @required this.padding,
   });
 
   // The style for the labels.
   final TextStyle labelStyle;
 
   // The text direction for the text.
-  final TextDirection? textDirection;
+  final TextDirection textDirection;
 
   // The text scale factor for the text.
   final double textScaleFactor;
@@ -245,12 +244,12 @@ class RallyLineChartPainter extends CustomPainter {
   void _drawXAxisLabels(Canvas canvas, Rect rect) {
     final selectedLabelStyle = labelStyle.copyWith(
       fontWeight: FontWeight.w700,
-      fontSize: labelStyle.fontSize! * textScaleFactor,
+      fontSize: labelStyle.fontSize * textScaleFactor,
     );
     final unselectedLabelStyle = labelStyle.copyWith(
       fontWeight: FontWeight.w700,
       color: RallyColors.gray25,
-      fontSize: labelStyle.fontSize! * textScaleFactor,
+      fontSize: labelStyle.fontSize * textScaleFactor,
     );
 
     // We use toUpperCase to format the dates. This function uses the language

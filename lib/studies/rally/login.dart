@@ -5,6 +5,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/gallery_localizations.dart';
+
 import 'package:gallery/data/gallery_options.dart';
 import 'package:gallery/layout/adaptive.dart';
 import 'package:gallery/layout/image_placeholder.dart';
@@ -13,10 +14,10 @@ import 'package:gallery/studies/rally/app.dart';
 import 'package:gallery/studies/rally/colors.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  const LoginPage({Key key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> with RestorationMixin {
@@ -29,7 +30,7 @@ class _LoginPageState extends State<LoginPage> with RestorationMixin {
   String get restorationId => 'login_page';
 
   @override
-  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+  void restoreState(RestorationBucket oldBucket, bool initialRestore) {
     registerForRestoration(_usernameController, restorationId);
     registerForRestoration(_passwordController, restorationId);
   }
@@ -38,6 +39,7 @@ class _LoginPageState extends State<LoginPage> with RestorationMixin {
   Widget build(BuildContext context) {
     return ApplyTextOptions(
       child: Scaffold(
+        appBar: AppBar(automaticallyImplyLeading: false),
         body: SafeArea(
           child: _MainView(
             usernameController: _usernameController.value,
@@ -58,12 +60,13 @@ class _LoginPageState extends State<LoginPage> with RestorationMixin {
 
 class _MainView extends StatelessWidget {
   const _MainView({
+    Key key,
     this.usernameController,
     this.passwordController,
-  });
+  }) : super(key: key);
 
-  final TextEditingController? usernameController;
-  final TextEditingController? passwordController;
+  final TextEditingController usernameController;
+  final TextEditingController passwordController;
 
   void _login(BuildContext context) {
     Navigator.of(context).restorablePushNamed(RallyApp.homeRoute);
@@ -131,12 +134,13 @@ class _MainView extends StatelessWidget {
 }
 
 class _TopBar extends StatelessWidget {
-  const _TopBar();
+  const _TopBar({
+    Key key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     const spacing = SizedBox(width: 30);
-    final localizations = GalleryLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(top: 8),
@@ -164,8 +168,8 @@ class _TopBar extends StatelessWidget {
               ),
               spacing,
               Text(
-                localizations.rallyLoginLoginToRally,
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                GalleryLocalizations.of(context).rallyLoginLoginToRally,
+                style: Theme.of(context).textTheme.bodyText1.copyWith(
                       fontSize: 35 / reducedTextScale(context),
                       fontWeight: FontWeight.w600,
                     ),
@@ -176,12 +180,12 @@ class _TopBar extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                localizations.rallyLoginNoAccount,
-                style: Theme.of(context).textTheme.titleMedium,
+                GalleryLocalizations.of(context).rallyLoginNoAccount,
+                style: Theme.of(context).textTheme.subtitle1,
               ),
               spacing,
               _BorderButton(
-                text: localizations.rallyLoginSignUp,
+                text: GalleryLocalizations.of(context).rallyLoginSignUp,
               ),
             ],
           ),
@@ -192,7 +196,9 @@ class _TopBar extends StatelessWidget {
 }
 
 class _SmallLogo extends StatelessWidget {
-  const _SmallLogo();
+  const _SmallLogo({
+    Key key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -213,12 +219,13 @@ class _SmallLogo extends StatelessWidget {
 
 class _UsernameInput extends StatelessWidget {
   const _UsernameInput({
+    Key key,
     this.maxWidth,
     this.usernameController,
-  });
+  }) : super(key: key);
 
-  final double? maxWidth;
-  final TextEditingController? usernameController;
+  final double maxWidth;
+  final TextEditingController usernameController;
 
   @override
   Widget build(BuildContext context) {
@@ -230,7 +237,7 @@ class _UsernameInput extends StatelessWidget {
           textInputAction: TextInputAction.next,
           controller: usernameController,
           decoration: InputDecoration(
-            labelText: GalleryLocalizations.of(context)!.rallyLoginUsername,
+            labelText: GalleryLocalizations.of(context).rallyLoginUsername,
           ),
         ),
       ),
@@ -240,12 +247,13 @@ class _UsernameInput extends StatelessWidget {
 
 class _PasswordInput extends StatelessWidget {
   const _PasswordInput({
+    Key key,
     this.maxWidth,
     this.passwordController,
-  });
+  }) : super(key: key);
 
-  final double? maxWidth;
-  final TextEditingController? passwordController;
+  final double maxWidth;
+  final TextEditingController passwordController;
 
   @override
   Widget build(BuildContext context) {
@@ -256,7 +264,7 @@ class _PasswordInput extends StatelessWidget {
         child: TextField(
           controller: passwordController,
           decoration: InputDecoration(
-            labelText: GalleryLocalizations.of(context)!.rallyLoginPassword,
+            labelText: GalleryLocalizations.of(context).rallyLoginPassword,
           ),
           obscureText: true,
         ),
@@ -267,7 +275,7 @@ class _PasswordInput extends StatelessWidget {
 
 class _ThumbButton extends StatefulWidget {
   const _ThumbButton({
-    required this.onTap,
+    @required this.onTap,
   });
 
   final VoidCallback onTap;
@@ -277,53 +285,50 @@ class _ThumbButton extends StatefulWidget {
 }
 
 class _ThumbButtonState extends State<_ThumbButton> {
-  BoxDecoration? borderDecoration;
+  BoxDecoration borderDecoration;
 
   @override
   Widget build(BuildContext context) {
     return Semantics(
       button: true,
       enabled: true,
-      label: GalleryLocalizations.of(context)!.rallyLoginLabelLogin,
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: GestureDetector(
-          onTap: widget.onTap,
-          child: Focus(
-            onKey: (node, event) {
-              if (event is RawKeyDownEvent) {
-                if (event.logicalKey == LogicalKeyboardKey.enter ||
-                    event.logicalKey == LogicalKeyboardKey.space) {
-                  widget.onTap();
-                  return KeyEventResult.handled;
-                }
+      label: GalleryLocalizations.of(context).rallyLoginLabelLogin,
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: Focus(
+          onKey: (node, event) {
+            if (event is RawKeyDownEvent) {
+              if (event.logicalKey == LogicalKeyboardKey.enter ||
+                  event.logicalKey == LogicalKeyboardKey.space) {
+                widget.onTap();
+                return KeyEventResult.handled;
               }
-              return KeyEventResult.ignored;
-            },
-            onFocusChange: (hasFocus) {
-              if (hasFocus) {
-                setState(() {
-                  borderDecoration = BoxDecoration(
-                    border: Border.all(
-                      color: Colors.white.withOpacity(0.5),
-                      width: 2,
-                    ),
-                  );
-                });
-              } else {
-                setState(() {
-                  borderDecoration = null;
-                });
-              }
-            },
-            child: Container(
-              decoration: borderDecoration,
-              height: 120,
-              child: ExcludeSemantics(
-                child: Image.asset(
-                  'thumb.png',
-                  package: 'rally_assets',
-                ),
+            }
+            return KeyEventResult.ignored;
+          },
+          onFocusChange: (hasFocus) {
+            if (hasFocus) {
+              setState(() {
+                borderDecoration = BoxDecoration(
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.5),
+                    width: 2,
+                  ),
+                );
+              });
+            } else {
+              setState(() {
+                borderDecoration = null;
+              });
+            }
+          },
+          child: Container(
+            decoration: borderDecoration,
+            height: 120,
+            child: ExcludeSemantics(
+              child: Image.asset(
+                'thumb.png',
+                package: 'rally_assets',
               ),
             ),
           ),
@@ -335,11 +340,12 @@ class _ThumbButtonState extends State<_ThumbButton> {
 
 class _LoginButton extends StatelessWidget {
   const _LoginButton({
-    required this.onTap,
+    Key key,
+    @required this.onTap,
     this.maxWidth,
-  });
+  }) : super(key: key);
 
-  final double? maxWidth;
+  final double maxWidth;
   final VoidCallback onTap;
 
   @override
@@ -354,10 +360,10 @@ class _LoginButton extends StatelessWidget {
             const Icon(Icons.check_circle_outline,
                 color: RallyColors.buttonColor),
             const SizedBox(width: 12),
-            Text(GalleryLocalizations.of(context)!.rallyLoginRememberMe),
+            Text(GalleryLocalizations.of(context).rallyLoginRememberMe),
             const Expanded(child: SizedBox.shrink()),
             _FilledButton(
-              text: GalleryLocalizations.of(context)!.rallyLoginButtonLogin,
+              text: GalleryLocalizations.of(context).rallyLoginButtonLogin,
               onTap: onTap,
             ),
           ],
@@ -368,7 +374,7 @@ class _LoginButton extends StatelessWidget {
 }
 
 class _BorderButton extends StatelessWidget {
-  const _BorderButton({required this.text});
+  const _BorderButton({Key key, @required this.text}) : super(key: key);
 
   final String text;
 
@@ -376,7 +382,7 @@ class _BorderButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return OutlinedButton(
       style: OutlinedButton.styleFrom(
-        foregroundColor: Colors.white,
+        primary: Colors.white,
         side: const BorderSide(color: RallyColors.buttonColor),
         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
         shape: RoundedRectangleBorder(
@@ -392,7 +398,8 @@ class _BorderButton extends StatelessWidget {
 }
 
 class _FilledButton extends StatelessWidget {
-  const _FilledButton({required this.text, required this.onTap});
+  const _FilledButton({Key key, @required this.text, @required this.onTap})
+      : super(key: key);
 
   final String text;
   final VoidCallback onTap;
@@ -401,8 +408,8 @@ class _FilledButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       style: TextButton.styleFrom(
-        foregroundColor: Colors.black,
         backgroundColor: RallyColors.buttonColor,
+        primary: Colors.black,
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 24),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),

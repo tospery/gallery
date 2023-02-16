@@ -13,7 +13,7 @@ import 'package:gallery/studies/crane/sleep_form.dart';
 import 'package:gallery/studies/crane/theme.dart';
 
 class CraneApp extends StatelessWidget {
-  const CraneApp({super.key});
+  const CraneApp({Key key}) : super(key: key);
 
   static const String defaultRoute = routes.defaultRoute;
 

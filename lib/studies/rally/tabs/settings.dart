@@ -3,16 +3,17 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
+
 import 'package:gallery/layout/adaptive.dart';
 import 'package:gallery/studies/rally/colors.dart';
 import 'package:gallery/studies/rally/data.dart';
 import 'package:gallery/studies/rally/routes.dart' as rally_route;
 
 class SettingsView extends StatefulWidget {
-  const SettingsView({super.key});
+  const SettingsView({Key key}) : super(key: key);
 
   @override
-  State<SettingsView> createState() => _SettingsViewState();
+  _SettingsViewState createState() => _SettingsViewState();
 }
 
 class _SettingsViewState extends State<SettingsView> {
@@ -49,7 +50,7 @@ class _SettingsItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       style: TextButton.styleFrom(
-        foregroundColor: Colors.white,
+        primary: Colors.white,
         padding: EdgeInsets.zero,
       ),
       onPressed: () {

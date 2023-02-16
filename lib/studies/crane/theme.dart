@@ -20,12 +20,13 @@ ThemeData _buildCraneTheme() {
     colorScheme: const ColorScheme.light().copyWith(
       primary: cranePurple800,
       secondary: craneRed700,
-      error: craneErrorOrange,
     ),
+    primaryColor: cranePurple800,
     hintColor: craneWhite60,
     indicatorColor: cranePrimaryWhite,
     scaffoldBackgroundColor: cranePrimaryWhite,
     cardColor: cranePrimaryWhite,
+    errorColor: craneErrorOrange,
     highlightColor: Colors.transparent,
     textTheme: _buildCraneTextTheme(base.textTheme),
     textSelectionTheme: const TextSelectionThemeData(
@@ -40,59 +41,59 @@ ThemeData _buildCraneTheme() {
 TextTheme _buildCraneTextTheme(TextTheme base) {
   return GoogleFonts.ralewayTextTheme(
     base.copyWith(
-      displayLarge: base.displayLarge!.copyWith(
+      headline1: base.headline1.copyWith(
         fontWeight: FontWeight.w300,
         fontSize: 96,
       ),
-      displayMedium: base.displayMedium!.copyWith(
+      headline2: base.headline2.copyWith(
         fontWeight: FontWeight.w400,
         fontSize: 60,
       ),
-      displaySmall: base.displaySmall!.copyWith(
+      headline3: base.headline3.copyWith(
         fontWeight: FontWeight.w600,
         fontSize: 48,
       ),
-      headlineMedium: base.headlineMedium!.copyWith(
+      headline4: base.headline4.copyWith(
         fontWeight: FontWeight.w600,
         fontSize: 34,
       ),
-      headlineSmall: base.headlineSmall!.copyWith(
+      headline5: base.headline5.copyWith(
         fontWeight: FontWeight.w600,
         fontSize: 24,
       ),
-      titleLarge: base.titleLarge!.copyWith(
+      headline6: base.headline6.copyWith(
         fontWeight: FontWeight.w600,
         fontSize: 20,
       ),
-      titleMedium: base.titleMedium!.copyWith(
+      subtitle1: base.subtitle1.copyWith(
         fontWeight: FontWeight.w500,
         fontSize: 16,
         letterSpacing: letterSpacingOrNone(0.5),
       ),
-      titleSmall: base.titleSmall!.copyWith(
+      subtitle2: base.subtitle2.copyWith(
         fontWeight: FontWeight.w600,
         fontSize: 12,
         color: craneGrey,
       ),
-      bodyLarge: base.bodyLarge!.copyWith(
+      bodyText1: base.bodyText1.copyWith(
         fontWeight: FontWeight.w500,
         fontSize: 16,
       ),
-      bodyMedium: base.bodyMedium!.copyWith(
+      bodyText2: base.bodyText2.copyWith(
         fontWeight: FontWeight.w400,
         fontSize: 14,
       ),
-      labelLarge: base.labelLarge!.copyWith(
+      button: base.button.copyWith(
         fontWeight: FontWeight.w600,
         fontSize: 13,
         letterSpacing: letterSpacingOrNone(0.8),
       ),
-      bodySmall: base.bodySmall!.copyWith(
+      caption: base.caption.copyWith(
         fontWeight: FontWeight.w500,
         fontSize: 12,
         color: craneGrey,
       ),
-      labelSmall: base.labelSmall!.copyWith(
+      overline: base.overline.copyWith(
         fontWeight: FontWeight.w600,
         fontSize: 12,
       ),

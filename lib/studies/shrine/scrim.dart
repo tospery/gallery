@@ -5,7 +5,7 @@
 import 'package:flutter/material.dart';
 
 class Scrim extends StatelessWidget {
-  const Scrim({super.key, required this.controller});
+  const Scrim({Key key, this.controller}) : super(key: key);
 
   final AnimationController controller;
 
@@ -27,14 +27,11 @@ class Scrim extends StatelessWidget {
           final tapToRevert = (controller.status == AnimationStatus.completed);
 
           if (tapToRevert) {
-            return MouseRegion(
-              cursor: SystemMouseCursors.click,
-              child: GestureDetector(
-                onTap: () {
-                  controller.reverse();
-                },
-                child: scrimRectangle,
-              ),
+            return GestureDetector(
+              onTap: () {
+                controller.reverse();
+              },
+              child: scrimRectangle,
             );
           } else if (ignorePointer) {
             return IgnorePointer(child: scrimRectangle);

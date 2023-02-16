@@ -3,15 +3,15 @@ import 'package:gallery/studies/reply/colors.dart';
 
 class BottomDrawer extends StatelessWidget {
   const BottomDrawer({
-    super.key,
+    Key key,
     this.onVerticalDragUpdate,
     this.onVerticalDragEnd,
-    required this.leading,
-    required this.trailing,
-  });
+    this.leading,
+    this.trailing,
+  }) : super(key: key);
 
-  final GestureDragUpdateCallback? onVerticalDragUpdate;
-  final GestureDragEndCallback? onVerticalDragEnd;
+  final GestureDragUpdateCallback onVerticalDragUpdate;
+  final GestureDragEndCallback onVerticalDragEnd;
   final Widget leading;
   final Widget trailing;
 
@@ -47,9 +47,9 @@ class BottomDrawer extends StatelessWidget {
               padding: const EdgeInsetsDirectional.only(start: 18),
               child: Text(
                 'FOLDERS',
-                style: theme.textTheme.bodySmall!.copyWith(
+                style: theme.textTheme.caption.copyWith(
                   color:
-                      theme.navigationRailTheme.unselectedLabelTextStyle!.color,
+                      theme.navigationRailTheme.unselectedLabelTextStyle.color,
                 ),
               ),
             ),

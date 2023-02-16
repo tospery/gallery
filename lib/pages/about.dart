@@ -9,8 +9,9 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void showAboutDialog({
-  required BuildContext context,
+  @required BuildContext context,
 }) {
+  assert(context != null);
   showDialog<void>(
     context: context,
     builder: (context) {
@@ -30,13 +31,13 @@ class _AboutDialog extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     final bodyTextStyle =
-        textTheme.bodyLarge!.apply(color: colorScheme.onPrimary);
-    final localizations = GalleryLocalizations.of(context)!;
+        textTheme.bodyText1.apply(color: colorScheme.onPrimary);
 
     const name = 'Flutter Gallery'; // Don't need to localize.
     const legalese = '© 2021 The Flutter team'; // Don't need to localize.
-    final repoText = localizations.githubRepo(name);
-    final seeSource = localizations.aboutDialogDescription(repoText);
+    final repoText = GalleryLocalizations.of(context).githubRepo(name);
+    final seeSource =
+        GalleryLocalizations.of(context).aboutDialogDescription(repoText);
     final repoLinkIndex = seeSource.indexOf(repoText);
     final repoLinkIndexEnd = repoLinkIndex + repoText.length;
     final seeSourceFirst = seeSource.substring(0, repoLinkIndex);
@@ -53,16 +54,14 @@ class _AboutDialog extends StatelessWidget {
           children: [
             FutureBuilder(
               future: getVersionNumber(),
-              builder: (context, snapshot) => SelectableText(
+              builder: (context, snapshot) => Text(
                 snapshot.hasData ? '$name ${snapshot.data}' : name,
-                style: textTheme.headlineMedium!.apply(
-                  color: colorScheme.onPrimary,
-                ),
+                style: textTheme.headline4.apply(color: colorScheme.onPrimary),
               ),
             ),
             const SizedBox(height: 24),
-            SelectableText.rich(
-              TextSpan(
+            RichText(
+              text: TextSpan(
                 children: [
                   TextSpan(
                     style: bodyTextStyle,
@@ -75,10 +74,12 @@ class _AboutDialog extends StatelessWidget {
                     text: repoText,
                     recognizer: TapGestureRecognizer()
                       ..onTap = () async {
-                        final url =
-                            Uri.parse('https://github.com/flutter/gallery/');
-                        if (await canLaunchUrl(url)) {
-                          await launchUrl(url);
+                        const url = 'https://github.com/flutter/gallery/';
+                        if (await canLaunch(url)) {
+                          await launch(
+                            url,
+                            forceSafariVC: false,
+                          );
                         }
                       },
                   ),
@@ -90,7 +91,7 @@ class _AboutDialog extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 18),
-            SelectableText(
+            Text(
               legalese,
               style: bodyTextStyle,
             ),

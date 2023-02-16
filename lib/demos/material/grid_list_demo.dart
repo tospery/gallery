@@ -9,72 +9,71 @@ import 'package:gallery/demos/material/material_demo_types.dart';
 // BEGIN gridListsDemo
 
 class GridListDemo extends StatelessWidget {
-  const GridListDemo({super.key, required this.type});
+  const GridListDemo({Key key, this.type}) : super(key: key);
 
   final GridListDemoType type;
 
   List<_Photo> _photos(BuildContext context) {
-    final localizations = GalleryLocalizations.of(context)!;
     return [
       _Photo(
         assetName: 'places/india_chennai_flower_market.png',
-        title: localizations.placeChennai,
-        subtitle: localizations.placeFlowerMarket,
+        title: GalleryLocalizations.of(context).placeChennai,
+        subtitle: GalleryLocalizations.of(context).placeFlowerMarket,
       ),
       _Photo(
         assetName: 'places/india_tanjore_bronze_works.png',
-        title: localizations.placeTanjore,
-        subtitle: localizations.placeBronzeWorks,
+        title: GalleryLocalizations.of(context).placeTanjore,
+        subtitle: GalleryLocalizations.of(context).placeBronzeWorks,
       ),
       _Photo(
         assetName: 'places/india_tanjore_market_merchant.png',
-        title: localizations.placeTanjore,
-        subtitle: localizations.placeMarket,
+        title: GalleryLocalizations.of(context).placeTanjore,
+        subtitle: GalleryLocalizations.of(context).placeMarket,
       ),
       _Photo(
         assetName: 'places/india_tanjore_thanjavur_temple.png',
-        title: localizations.placeTanjore,
-        subtitle: localizations.placeThanjavurTemple,
+        title: GalleryLocalizations.of(context).placeTanjore,
+        subtitle: GalleryLocalizations.of(context).placeThanjavurTemple,
       ),
       _Photo(
         assetName: 'places/india_tanjore_thanjavur_temple_carvings.png',
-        title: localizations.placeTanjore,
-        subtitle: localizations.placeThanjavurTemple,
+        title: GalleryLocalizations.of(context).placeTanjore,
+        subtitle: GalleryLocalizations.of(context).placeThanjavurTemple,
       ),
       _Photo(
         assetName: 'places/india_pondicherry_salt_farm.png',
-        title: localizations.placePondicherry,
-        subtitle: localizations.placeSaltFarm,
+        title: GalleryLocalizations.of(context).placePondicherry,
+        subtitle: GalleryLocalizations.of(context).placeSaltFarm,
       ),
       _Photo(
         assetName: 'places/india_chennai_highway.png',
-        title: localizations.placeChennai,
-        subtitle: localizations.placeScooters,
+        title: GalleryLocalizations.of(context).placeChennai,
+        subtitle: GalleryLocalizations.of(context).placeScooters,
       ),
       _Photo(
         assetName: 'places/india_chettinad_silk_maker.png',
-        title: localizations.placeChettinad,
-        subtitle: localizations.placeSilkMaker,
+        title: GalleryLocalizations.of(context).placeChettinad,
+        subtitle: GalleryLocalizations.of(context).placeSilkMaker,
       ),
       _Photo(
         assetName: 'places/india_chettinad_produce.png',
-        title: localizations.placeChettinad,
-        subtitle: localizations.placeLunchPrep,
+        title: GalleryLocalizations.of(context).placeChettinad,
+        subtitle: GalleryLocalizations.of(context).placeLunchPrep,
       ),
       _Photo(
         assetName: 'places/india_tanjore_market_technology.png',
-        title: localizations.placeTanjore,
-        subtitle: localizations.placeMarket,
+        title: GalleryLocalizations.of(context).placeTanjore,
+        subtitle: GalleryLocalizations.of(context).placeMarket,
       ),
       _Photo(
         assetName: 'places/india_pondicherry_beach.png',
-        title: localizations.placePondicherry,
-        subtitle: localizations.placeBeach,
+        title: GalleryLocalizations.of(context).placePondicherry,
+        subtitle: GalleryLocalizations.of(context).placeBeach,
       ),
       _Photo(
         assetName: 'places/india_pondicherry_fisherman.png',
-        title: localizations.placePondicherry,
-        subtitle: localizations.placeFisherman,
+        title: GalleryLocalizations.of(context).placePondicherry,
+        subtitle: GalleryLocalizations.of(context).placeFisherman,
       ),
     ];
   }
@@ -84,7 +83,7 @@ class GridListDemo extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text(GalleryLocalizations.of(context)!.demoGridListsTitle),
+        title: Text(GalleryLocalizations.of(context).demoGridListsTitle),
       ),
       body: GridView.count(
         restorationId: 'grid_view_demo_grid_offset',
@@ -106,9 +105,9 @@ class GridListDemo extends StatelessWidget {
 
 class _Photo {
   _Photo({
-    required this.assetName,
-    required this.title,
-    required this.subtitle,
+    this.assetName,
+    this.title,
+    this.subtitle,
   });
 
   final String assetName;
@@ -134,25 +133,23 @@ class _GridTitleText extends StatelessWidget {
 
 class _GridDemoPhotoItem extends StatelessWidget {
   const _GridDemoPhotoItem({
-    required this.photo,
-    required this.tileStyle,
-  });
+    Key key,
+    @required this.photo,
+    @required this.tileStyle,
+  }) : super(key: key);
 
   final _Photo photo;
   final GridListDemoType tileStyle;
 
   @override
   Widget build(BuildContext context) {
-    final Widget image = Semantics(
-      label: '${photo.title} ${photo.subtitle}',
-      child: Material(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-        clipBehavior: Clip.antiAlias,
-        child: Image.asset(
-          photo.assetName,
-          package: 'flutter_gallery_assets',
-          fit: BoxFit.cover,
-        ),
+    final Widget image = Material(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+      clipBehavior: Clip.antiAlias,
+      child: Image.asset(
+        photo.assetName,
+        package: 'flutter_gallery_assets',
+        fit: BoxFit.cover,
       ),
     );
 
@@ -191,6 +188,7 @@ class _GridDemoPhotoItem extends StatelessWidget {
           child: image,
         );
     }
+    return null;
   }
 }
 

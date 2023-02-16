@@ -12,10 +12,10 @@ import 'package:gallery/studies/rally/tabs/sidebar.dart';
 
 /// A page that shows a summary of bills.
 class BillsView extends StatefulWidget {
-  const BillsView({super.key});
+  const BillsView({Key key}) : super(key: key);
 
   @override
-  State<BillsView> createState() => _BillsViewState();
+  _BillsViewState createState() => _BillsViewState();
 }
 
 class _BillsViewState extends State<BillsView>
@@ -34,7 +34,7 @@ class _BillsViewState extends State<BillsView>
     return TabWithSidebar(
       restorationId: 'bills_view',
       mainView: FinancialEntityView(
-        heroLabel: GalleryLocalizations.of(context)!.rallyBillsDue,
+        heroLabel: GalleryLocalizations.of(context).rallyBillsDue,
         heroAmount: dueTotal,
         segments: buildSegmentsFromBillItems(items),
         wholeAmount: dueTotal,

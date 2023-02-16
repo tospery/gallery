@@ -21,19 +21,14 @@ or alternatively using `brew install fastlane`
 fastlane android test
 ```
 Runs all the tests
-### android beta
+### android internal
 ```
-fastlane android beta
+fastlane android internal
 ```
-Submit a new beta build to Google Play
-### android promote_to_production
+Submit a new internal build to Google Play
+### android prod
 ```
-fastlane android promote_to_production
-```
-Promote beta track to prod
-### android production
-```
-fastlane android production
+fastlane android prod
 ```
 Submit a new production build to Google Play
 

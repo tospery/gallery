@@ -3,22 +3,22 @@ import 'package:gallery/studies/reply/model/email_store.dart';
 import 'package:provider/provider.dart';
 
 class ComposePage extends StatelessWidget {
-  const ComposePage({super.key});
+  const ComposePage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var senderEmail = 'flutterfan@gmail.com';
-    String subject = '';
-    String? recipient = 'Recipient';
-    String recipientAvatar = 'reply/avatars/avatar_0.jpg';
+    var _senderEmail = 'flutterfan@gmail.com';
+    var _subject = '';
+    var _recipient = 'Recipient';
+    var _recipientAvatar = 'reply/avatars/avatar_0.jpg';
 
     final emailStore = Provider.of<EmailStore>(context);
 
     if (emailStore.selectedEmailId >= 0) {
       final currentEmail = emailStore.currentEmail;
-      subject = currentEmail.subject;
-      recipient = currentEmail.sender;
-      recipientAvatar = currentEmail.avatar;
+      _subject = currentEmail.subject;
+      _recipient = currentEmail.sender;
+      _recipientAvatar = currentEmail.avatar;
     }
 
     return Scaffold(
@@ -34,16 +34,16 @@ class ComposePage extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   _SubjectRow(
-                    subject: subject,
+                    subject: _subject,
                   ),
                   const _SectionDivider(),
                   _SenderAddressRow(
-                    senderEmail: senderEmail,
+                    senderEmail: _senderEmail,
                   ),
                   const _SectionDivider(),
                   _RecipientsRow(
-                    recipients: recipient,
-                    avatar: recipientAvatar,
+                    recipients: _recipient,
+                    avatar: _recipientAvatar,
                   ),
                   const _SectionDivider(),
                   Padding(
@@ -55,7 +55,7 @@ class ComposePage extends StatelessWidget {
                         hintText: 'New Message...',
                       ),
                       autofocus: false,
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      style: Theme.of(context).textTheme.bodyText2,
                     ),
                   ),
                 ],
@@ -69,16 +69,15 @@ class ComposePage extends StatelessWidget {
 }
 
 class _SubjectRow extends StatefulWidget {
-  const _SubjectRow({required this.subject});
+  const _SubjectRow({@required this.subject}) : assert(subject != null);
 
   final String subject;
-
   @override
   _SubjectRowState createState() => _SubjectRowState();
 }
 
 class _SubjectRowState extends State<_SubjectRow> {
-  TextEditingController? _subjectController;
+  TextEditingController _subjectController;
 
   @override
   void initState() {
@@ -88,7 +87,7 @@ class _SubjectRowState extends State<_SubjectRow> {
 
   @override
   void dispose() {
-    _subjectController!.dispose();
+    _subjectController.dispose();
     super.dispose();
   }
 
@@ -115,10 +114,10 @@ class _SubjectRowState extends State<_SubjectRow> {
               controller: _subjectController,
               maxLines: 1,
               autofocus: false,
-              style: theme.textTheme.titleLarge,
+              style: theme.textTheme.headline6,
               decoration: InputDecoration.collapsed(
                 hintText: 'Subject',
-                hintStyle: theme.textTheme.titleLarge!.copyWith(
+                hintStyle: theme.textTheme.headline6.copyWith(
                   color: theme.colorScheme.primary.withOpacity(0.5),
                 ),
               ),
@@ -144,7 +143,8 @@ class _SubjectRowState extends State<_SubjectRow> {
 }
 
 class _SenderAddressRow extends StatefulWidget {
-  const _SenderAddressRow({required this.senderEmail});
+  const _SenderAddressRow({@required this.senderEmail})
+      : assert(senderEmail != null);
 
   final String senderEmail;
 
@@ -153,7 +153,7 @@ class _SenderAddressRow extends StatefulWidget {
 }
 
 class __SenderAddressRowState extends State<_SenderAddressRow> {
-  late String senderEmail;
+  String senderEmail;
 
   @override
   void initState() {
@@ -182,14 +182,14 @@ class __SenderAddressRowState extends State<_SenderAddressRow> {
           value: accounts[0],
           child: Text(
             accounts[0],
-            style: textTheme.bodyMedium,
+            style: textTheme.bodyText2,
           ),
         ),
         PopupMenuItem<String>(
           value: accounts[1],
           child: Text(
             accounts[1],
-            style: textTheme.bodyMedium,
+            style: textTheme.bodyText2,
           ),
         ),
       ],
@@ -206,7 +206,7 @@ class __SenderAddressRowState extends State<_SenderAddressRow> {
             Expanded(
               child: Text(
                 senderEmail,
-                style: textTheme.bodyMedium,
+                style: textTheme.bodyText2,
               ),
             ),
             Icon(
@@ -222,9 +222,10 @@ class __SenderAddressRowState extends State<_SenderAddressRow> {
 
 class _RecipientsRow extends StatelessWidget {
   const _RecipientsRow({
-    required this.recipients,
-    required this.avatar,
-  });
+    @required this.recipients,
+    @required this.avatar,
+  })  : assert(recipients != null),
+        assert(avatar != null);
 
   final String recipients;
   final String avatar;

@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:gallery/layout/letter_spacing.dart';
 import 'package:gallery/studies/shrine/colors.dart';
 import 'package:gallery/studies/shrine/supplemental/cut_corners_border.dart';
@@ -22,12 +21,12 @@ IconThemeData _customIconTheme(IconThemeData original) {
 ThemeData _buildShrineTheme() {
   final base = ThemeData.light();
   return base.copyWith(
-    appBarTheme: const AppBarTheme(
-      systemOverlayStyle: SystemUiOverlayStyle.dark,
-      elevation: 0,
-    ),
+    appBarTheme: const AppBarTheme(brightness: Brightness.light, elevation: 0),
+    colorScheme: _shrineColorScheme,
+    primaryColor: shrinePink100,
     scaffoldBackgroundColor: shrineBackgroundWhite,
     cardColor: shrineBackgroundWhite,
+    errorColor: shrineErrorRed,
     primaryIconTheme: _customIconTheme(base.iconTheme),
     inputDecorationTheme: const InputDecorationTheme(
       border: CutCornersBorder(
@@ -41,44 +40,40 @@ ThemeData _buildShrineTheme() {
     ),
     primaryTextTheme: _buildShrineTextTheme(base.primaryTextTheme),
     iconTheme: _customIconTheme(base.iconTheme),
-    colorScheme: _shrineColorScheme.copyWith(
-      error: shrineErrorRed,
-      primary: shrinePink100,
-    ),
   );
 }
 
 TextTheme _buildShrineTextTheme(TextTheme base) {
   return GoogleFonts.rubikTextTheme(base
       .copyWith(
-        headlineSmall: base.headlineSmall!.copyWith(
+        headline5: base.headline5.copyWith(
           fontWeight: FontWeight.w500,
           letterSpacing: letterSpacingOrNone(defaultLetterSpacing),
         ),
-        titleLarge: base.titleLarge!.copyWith(
+        headline6: base.headline6.copyWith(
           fontSize: 18,
           letterSpacing: letterSpacingOrNone(defaultLetterSpacing),
         ),
-        bodySmall: base.bodySmall!.copyWith(
+        caption: base.caption.copyWith(
           fontWeight: FontWeight.w400,
           fontSize: 14,
           letterSpacing: letterSpacingOrNone(defaultLetterSpacing),
         ),
-        bodyLarge: base.bodyLarge!.copyWith(
+        bodyText1: base.bodyText1.copyWith(
           fontWeight: FontWeight.w500,
           fontSize: 16,
           letterSpacing: letterSpacingOrNone(defaultLetterSpacing),
         ),
-        bodyMedium: base.bodyMedium!.copyWith(
+        bodyText2: base.bodyText2.copyWith(
           letterSpacing: letterSpacingOrNone(defaultLetterSpacing),
         ),
-        titleMedium: base.titleMedium!.copyWith(
+        subtitle1: base.subtitle1.copyWith(
           letterSpacing: letterSpacingOrNone(defaultLetterSpacing),
         ),
-        headlineMedium: base.headlineMedium!.copyWith(
+        headline4: base.headline4.copyWith(
           letterSpacing: letterSpacingOrNone(defaultLetterSpacing),
         ),
-        labelLarge: base.labelLarge!.copyWith(
+        button: base.button.copyWith(
           fontWeight: FontWeight.w500,
           fontSize: 14,
           letterSpacing: letterSpacingOrNone(defaultLetterSpacing),
@@ -92,9 +87,9 @@ TextTheme _buildShrineTextTheme(TextTheme base) {
 
 const ColorScheme _shrineColorScheme = ColorScheme(
   primary: shrinePink100,
-  primaryContainer: shrineBrown900,
+  primaryVariant: shrineBrown900,
   secondary: shrinePink50,
-  secondaryContainer: shrineBrown900,
+  secondaryVariant: shrineBrown900,
   surface: shrineSurfaceWhite,
   background: shrineBackgroundWhite,
   error: shrineErrorRed,

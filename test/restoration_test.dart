@@ -182,7 +182,6 @@ void main() {
     variant: const TargetPlatformVariant(
       <TargetPlatform>{TargetPlatform.android},
     ),
-    skip: true,
-    // TODO(x): State restoration test is failing at Inbox tap is failing, but works in App, https://github.com/flutter/gallery/issues/570.
+    skip: true, // TODO: Investigate why Inbox tap is failing. In App it works.
   );
 }

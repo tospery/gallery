@@ -20,10 +20,14 @@ class GalleryThemeData {
     return ThemeData(
       colorScheme: colorScheme,
       textTheme: _textTheme,
+      // Matches manifest.json colors and background color.
+      primaryColor: const Color(0xFF030303),
       appBarTheme: AppBarTheme(
-        backgroundColor: colorScheme.background,
+        textTheme: _textTheme.apply(bodyColor: colorScheme.onPrimary),
+        color: colorScheme.background,
         elevation: 0,
         iconTheme: IconThemeData(color: colorScheme.primary),
+        brightness: colorScheme.brightness,
       ),
       iconTheme: IconThemeData(color: colorScheme.onPrimary),
       canvasColor: colorScheme.background,
@@ -36,16 +40,16 @@ class GalleryThemeData {
           _lightFillColor.withOpacity(0.80),
           _darkFillColor,
         ),
-        contentTextStyle: _textTheme.titleMedium!.apply(color: _darkFillColor),
+        contentTextStyle: _textTheme.subtitle1.apply(color: _darkFillColor),
       ),
     );
   }
 
   static const ColorScheme lightColorScheme = ColorScheme(
     primary: Color(0xFFB93C5D),
-    primaryContainer: Color(0xFF117378),
+    primaryVariant: Color(0xFF117378),
     secondary: Color(0xFFEFF3F3),
-    secondaryContainer: Color(0xFFFAFBFB),
+    secondaryVariant: Color(0xFFFAFBFB),
     background: Color(0xFFE6EBEB),
     surface: Color(0xFFFAFBFB),
     onBackground: Colors.white,
@@ -59,9 +63,9 @@ class GalleryThemeData {
 
   static const ColorScheme darkColorScheme = ColorScheme(
     primary: Color(0xFFFF8383),
-    primaryContainer: Color(0xFF1CDEC9),
+    primaryVariant: Color(0xFF1CDEC9),
     secondary: Color(0xFF4D1F7C),
-    secondaryContainer: Color(0xFF451B6F),
+    secondaryVariant: Color(0xFF451B6F),
     background: Color(0xFF241E30),
     surface: Color(0xFF1F1929),
     onBackground: Color(0x0DFFFFFF), // White with 0.05 opacity
@@ -79,15 +83,15 @@ class GalleryThemeData {
   static const _bold = FontWeight.w700;
 
   static final TextTheme _textTheme = TextTheme(
-    headlineMedium: GoogleFonts.montserrat(fontWeight: _bold, fontSize: 20.0),
-    bodySmall: GoogleFonts.oswald(fontWeight: _semiBold, fontSize: 16.0),
-    headlineSmall: GoogleFonts.oswald(fontWeight: _medium, fontSize: 16.0),
-    titleMedium: GoogleFonts.montserrat(fontWeight: _medium, fontSize: 16.0),
-    labelSmall: GoogleFonts.montserrat(fontWeight: _medium, fontSize: 12.0),
-    bodyLarge: GoogleFonts.montserrat(fontWeight: _regular, fontSize: 14.0),
-    titleSmall: GoogleFonts.montserrat(fontWeight: _medium, fontSize: 14.0),
-    bodyMedium: GoogleFonts.montserrat(fontWeight: _regular, fontSize: 16.0),
-    titleLarge: GoogleFonts.montserrat(fontWeight: _bold, fontSize: 16.0),
-    labelLarge: GoogleFonts.montserrat(fontWeight: _semiBold, fontSize: 14.0),
+    headline4: GoogleFonts.montserrat(fontWeight: _bold, fontSize: 20.0),
+    caption: GoogleFonts.oswald(fontWeight: _semiBold, fontSize: 16.0),
+    headline5: GoogleFonts.oswald(fontWeight: _medium, fontSize: 16.0),
+    subtitle1: GoogleFonts.montserrat(fontWeight: _medium, fontSize: 16.0),
+    overline: GoogleFonts.montserrat(fontWeight: _medium, fontSize: 12.0),
+    bodyText1: GoogleFonts.montserrat(fontWeight: _regular, fontSize: 14.0),
+    subtitle2: GoogleFonts.montserrat(fontWeight: _medium, fontSize: 14.0),
+    bodyText2: GoogleFonts.montserrat(fontWeight: _regular, fontSize: 16.0),
+    headline6: GoogleFonts.montserrat(fontWeight: _bold, fontSize: 16.0),
+    button: GoogleFonts.montserrat(fontWeight: _semiBold, fontSize: 14.0),
   );
 }

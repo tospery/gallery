@@ -15,7 +15,7 @@ import 'package:provider/provider.dart';
 final rootNavKey = GlobalKey<NavigatorState>();
 
 class ReplyApp extends StatefulWidget {
-  const ReplyApp({super.key});
+  const ReplyApp({Key key}) : super(key: key);
 
   static const String homeRoute = routes.homeRoute;
   static const String composeRoute = routes.composeRoute;
@@ -37,7 +37,7 @@ class ReplyApp extends StatefulWidget {
   }
 
   @override
-  State<ReplyApp> createState() => _ReplyAppState();
+  _ReplyAppState createState() => _ReplyAppState();
 }
 
 class _ReplyAppState extends State<ReplyApp> with RestorationMixin {
@@ -47,7 +47,7 @@ class _ReplyAppState extends State<ReplyApp> with RestorationMixin {
   String get restorationId => 'replyState';
 
   @override
-  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+  void restoreState(RestorationBucket oldBucket, bool initialRestore) {
     registerForRestoration(_appState, 'state');
   }
 
@@ -90,8 +90,10 @@ class _ReplyAppState extends State<ReplyApp> with RestorationMixin {
                 builder: (context) => const AdaptiveNav(),
                 settings: settings,
               );
+              break;
             case ReplyApp.composeRoute:
               return ReplyApp.createComposeRoute(settings);
+              break;
           }
           return null;
         },
@@ -107,7 +109,7 @@ class _RestorableEmailState extends RestorableListenable<EmailStore> {
   }
 
   @override
-  EmailStore fromPrimitives(Object? data) {
+  EmailStore fromPrimitives(Object data) {
     final appState = EmailStore();
     final appData = Map<String, dynamic>.from(data as Map);
     appState.selectedEmailId = appData['selectedEmailId'] as int;
@@ -145,7 +147,7 @@ class _RestorableEmailState extends RestorableListenable<EmailStore> {
 ThemeData _buildReplyLightTheme(BuildContext context) {
   final base = ThemeData.light();
   return base.copyWith(
-    bottomAppBarTheme: const BottomAppBarTheme(color: ReplyColors.blue700),
+    bottomAppBarColor: ReplyColors.blue700,
     bottomSheetTheme: BottomSheetThemeData(
       backgroundColor: ReplyColors.blue700,
       modalBackgroundColor: Colors.white.withOpacity(0.7),
@@ -154,12 +156,12 @@ ThemeData _buildReplyLightTheme(BuildContext context) {
       backgroundColor: ReplyColors.blue700,
       selectedIconTheme: const IconThemeData(color: ReplyColors.orange500),
       selectedLabelTextStyle:
-          GoogleFonts.workSansTextTheme().headlineSmall!.copyWith(
+          GoogleFonts.workSansTextTheme().headline5.copyWith(
                 color: ReplyColors.orange500,
               ),
       unselectedIconTheme: const IconThemeData(color: ReplyColors.blue200),
       unselectedLabelTextStyle:
-          GoogleFonts.workSansTextTheme().headlineSmall!.copyWith(
+          GoogleFonts.workSansTextTheme().headline5.copyWith(
                 color: ReplyColors.blue200,
               ),
     ),
@@ -172,9 +174,9 @@ ThemeData _buildReplyLightTheme(BuildContext context) {
     ),
     colorScheme: const ColorScheme.light(
       primary: ReplyColors.blue700,
-      primaryContainer: ReplyColors.blue800,
+      primaryVariant: ReplyColors.blue800,
       secondary: ReplyColors.orange500,
-      secondaryContainer: ReplyColors.orange400,
+      secondaryVariant: ReplyColors.orange400,
       surface: ReplyColors.white50,
       error: ReplyColors.red400,
       onPrimary: ReplyColors.white50,
@@ -192,9 +194,7 @@ ThemeData _buildReplyLightTheme(BuildContext context) {
 ThemeData _buildReplyDarkTheme(BuildContext context) {
   final base = ThemeData.dark();
   return base.copyWith(
-    bottomAppBarTheme: const BottomAppBarTheme(
-      color: ReplyColors.darkBottomAppBarBackground,
-    ),
+    bottomAppBarColor: ReplyColors.darkBottomAppBarBackground,
     bottomSheetTheme: BottomSheetThemeData(
       backgroundColor: ReplyColors.darkDrawerBackground,
       modalBackgroundColor: Colors.black.withOpacity(0.7),
@@ -203,12 +203,12 @@ ThemeData _buildReplyDarkTheme(BuildContext context) {
       backgroundColor: ReplyColors.darkBottomAppBarBackground,
       selectedIconTheme: const IconThemeData(color: ReplyColors.orange300),
       selectedLabelTextStyle:
-          GoogleFonts.workSansTextTheme().headlineSmall!.copyWith(
+          GoogleFonts.workSansTextTheme().headline5.copyWith(
                 color: ReplyColors.orange300,
               ),
       unselectedIconTheme: const IconThemeData(color: ReplyColors.greyLabel),
       unselectedLabelTextStyle:
-          GoogleFonts.workSansTextTheme().headlineSmall!.copyWith(
+          GoogleFonts.workSansTextTheme().headline5.copyWith(
                 color: ReplyColors.greyLabel,
               ),
     ),
@@ -221,9 +221,9 @@ ThemeData _buildReplyDarkTheme(BuildContext context) {
     ),
     colorScheme: const ColorScheme.dark(
       primary: ReplyColors.blue200,
-      primaryContainer: ReplyColors.blue300,
+      primaryVariant: ReplyColors.blue300,
       secondary: ReplyColors.orange300,
-      secondaryContainer: ReplyColors.orange300,
+      secondaryVariant: ReplyColors.orange300,
       surface: ReplyColors.black800,
       error: ReplyColors.red200,
       onPrimary: ReplyColors.black900,
@@ -250,56 +250,56 @@ ChipThemeData _buildChipTheme(
     secondarySelectedColor: chipBackground,
     padding: const EdgeInsets.all(4),
     shape: const StadiumBorder(),
-    labelStyle: GoogleFonts.workSansTextTheme().bodyMedium!.copyWith(
+    labelStyle: GoogleFonts.workSansTextTheme().bodyText2.copyWith(
           color: brightness == Brightness.dark
               ? ReplyColors.white50
               : ReplyColors.black900,
         ),
-    secondaryLabelStyle: GoogleFonts.workSansTextTheme().bodyMedium,
+    secondaryLabelStyle: GoogleFonts.workSansTextTheme().bodyText2,
     brightness: brightness,
   );
 }
 
 TextTheme _buildReplyLightTextTheme(TextTheme base) {
   return base.copyWith(
-    headlineMedium: GoogleFonts.workSans(
+    headline4: GoogleFonts.workSans(
       fontWeight: FontWeight.w600,
       fontSize: 34,
       letterSpacing: letterSpacingOrNone(0.4),
       height: 0.9,
       color: ReplyColors.black900,
     ),
-    headlineSmall: GoogleFonts.workSans(
+    headline5: GoogleFonts.workSans(
       fontWeight: FontWeight.bold,
       fontSize: 24,
       letterSpacing: letterSpacingOrNone(0.27),
       color: ReplyColors.black900,
     ),
-    titleLarge: GoogleFonts.workSans(
+    headline6: GoogleFonts.workSans(
       fontWeight: FontWeight.w600,
       fontSize: 20,
       letterSpacing: letterSpacingOrNone(0.18),
       color: ReplyColors.black900,
     ),
-    titleSmall: GoogleFonts.workSans(
+    subtitle2: GoogleFonts.workSans(
       fontWeight: FontWeight.w600,
       fontSize: 14,
       letterSpacing: letterSpacingOrNone(-0.04),
       color: ReplyColors.black900,
     ),
-    bodyLarge: GoogleFonts.workSans(
+    bodyText1: GoogleFonts.workSans(
       fontWeight: FontWeight.normal,
       fontSize: 18,
       letterSpacing: letterSpacingOrNone(0.2),
       color: ReplyColors.black900,
     ),
-    bodyMedium: GoogleFonts.workSans(
+    bodyText2: GoogleFonts.workSans(
       fontWeight: FontWeight.normal,
       fontSize: 14,
       letterSpacing: letterSpacingOrNone(-0.05),
       color: ReplyColors.black900,
     ),
-    bodySmall: GoogleFonts.workSans(
+    caption: GoogleFonts.workSans(
       fontWeight: FontWeight.normal,
       fontSize: 12,
       letterSpacing: letterSpacingOrNone(0.2),
@@ -310,44 +310,44 @@ TextTheme _buildReplyLightTextTheme(TextTheme base) {
 
 TextTheme _buildReplyDarkTextTheme(TextTheme base) {
   return base.copyWith(
-    headlineMedium: GoogleFonts.workSans(
+    headline4: GoogleFonts.workSans(
       fontWeight: FontWeight.w600,
       fontSize: 34,
       letterSpacing: letterSpacingOrNone(0.4),
       height: 0.9,
       color: ReplyColors.white50,
     ),
-    headlineSmall: GoogleFonts.workSans(
+    headline5: GoogleFonts.workSans(
       fontWeight: FontWeight.bold,
       fontSize: 24,
       letterSpacing: letterSpacingOrNone(0.27),
       color: ReplyColors.white50,
     ),
-    titleLarge: GoogleFonts.workSans(
+    headline6: GoogleFonts.workSans(
       fontWeight: FontWeight.w600,
       fontSize: 20,
       letterSpacing: letterSpacingOrNone(0.18),
       color: ReplyColors.white50,
     ),
-    titleSmall: GoogleFonts.workSans(
+    subtitle2: GoogleFonts.workSans(
       fontWeight: FontWeight.w600,
       fontSize: 14,
       letterSpacing: letterSpacingOrNone(-0.04),
       color: ReplyColors.white50,
     ),
-    bodyLarge: GoogleFonts.workSans(
+    bodyText1: GoogleFonts.workSans(
       fontWeight: FontWeight.normal,
       fontSize: 18,
       letterSpacing: letterSpacingOrNone(0.2),
       color: ReplyColors.white50,
     ),
-    bodyMedium: GoogleFonts.workSans(
+    bodyText2: GoogleFonts.workSans(
       fontWeight: FontWeight.normal,
       fontSize: 14,
       letterSpacing: letterSpacingOrNone(-0.05),
       color: ReplyColors.white50,
     ),
-    bodySmall: GoogleFonts.workSans(
+    caption: GoogleFonts.workSans(
       fontWeight: FontWeight.normal,
       fontSize: 12,
       letterSpacing: letterSpacingOrNone(0.2),

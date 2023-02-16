@@ -28,10 +28,10 @@ const double _kFlingVelocity = 2.0;
 const _kAnimationDuration = Duration(milliseconds: 300);
 
 class AdaptiveNav extends StatefulWidget {
-  const AdaptiveNav({super.key});
+  const AdaptiveNav({Key key}) : super(key: key);
 
   @override
-  State<AdaptiveNav> createState() => _AdaptiveNavState();
+  _AdaptiveNavState createState() => _AdaptiveNavState();
 }
 
 class _AdaptiveNavState extends State<AdaptiveNav> {
@@ -46,8 +46,8 @@ class _AdaptiveNavState extends State<AdaptiveNav> {
   Widget build(BuildContext context) {
     final isDesktop = isDisplayDesktop(context);
     final isTablet = isDisplaySmallDesktop(context);
-    final localizations = GalleryLocalizations.of(context)!;
-    final navigationDestinations = <_Destination>[
+    final localizations = GalleryLocalizations.of(context);
+    final _navigationDestinations = <_Destination>[
       _Destination(
         type: MailboxPageType.inbox,
         textLabel: localizations.replyInboxLabel,
@@ -80,7 +80,7 @@ class _AdaptiveNavState extends State<AdaptiveNav> {
       ),
     ];
 
-    final folders = <String, String>{
+    final _folders = <String, String>{
       'Receipts': _folderIconAssetLocation,
       'Pine Elementary': _folderIconAssetLocation,
       'Taxes': _folderIconAssetLocation,
@@ -93,15 +93,15 @@ class _AdaptiveNavState extends State<AdaptiveNav> {
       return _DesktopNav(
         inboxKey: _inboxKey,
         extended: !isTablet,
-        destinations: navigationDestinations,
-        folders: folders,
+        destinations: _navigationDestinations,
+        folders: _folders,
         onItemTapped: _onDestinationSelected,
       );
     } else {
       return _MobileNav(
         inboxKey: _inboxKey,
-        destinations: navigationDestinations,
-        folders: folders,
+        destinations: _navigationDestinations,
+        folders: _folders,
         onItemTapped: _onDestinationSelected,
       );
     }
@@ -122,14 +122,14 @@ class _AdaptiveNavState extends State<AdaptiveNav> {
     emailStore.selectedMailboxPage = destination;
 
     if (isDesktop) {
-      while (desktopMailNavKey.currentState!.canPop()) {
-        desktopMailNavKey.currentState!.pop();
+      while (desktopMailNavKey.currentState.canPop()) {
+        desktopMailNavKey.currentState.pop();
       }
     }
 
     if (emailStore.onMailView) {
       if (!isDesktop) {
-        mobileMailNavKey.currentState!.pop();
+        mobileMailNavKey.currentState.pop();
       }
 
       emailStore.selectedEmailId = -1;
@@ -139,15 +139,18 @@ class _AdaptiveNavState extends State<AdaptiveNav> {
 
 class _DesktopNav extends StatefulWidget {
   const _DesktopNav({
+    Key key,
     this.inboxKey,
-    required this.extended,
-    required this.destinations,
-    required this.folders,
-    required this.onItemTapped,
-  });
+    this.currentInbox,
+    this.extended,
+    this.destinations,
+    this.folders,
+    this.onItemTapped,
+  }) : super(key: key);
 
   final bool extended;
-  final UniqueKey? inboxKey;
+  final UniqueKey inboxKey;
+  final String currentInbox;
   final List<_Destination> destinations;
   final Map<String, String> folders;
   final void Function(int, MailboxPageType) onItemTapped;
@@ -158,7 +161,7 @@ class _DesktopNav extends StatefulWidget {
 
 class _DesktopNavState extends State<_DesktopNav>
     with SingleTickerProviderStateMixin {
-  late ValueNotifier<bool> _isExtended;
+  ValueNotifier<bool> _isExtended;
 
   @override
   void initState() {
@@ -257,7 +260,9 @@ class _DesktopNavState extends State<_DesktopNav>
 }
 
 class _NavigationRailHeader extends StatelessWidget {
-  const _NavigationRailHeader({required this.extended});
+  const _NavigationRailHeader({
+    @required this.extended,
+  }) : assert(extended != null);
 
   final ValueNotifier<bool> extended;
 
@@ -271,6 +276,7 @@ class _NavigationRailHeader extends StatelessWidget {
       builder: (context, child) {
         return Align(
           alignment: AlignmentDirectional.centerStart,
+          widthFactor: animation.value,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -304,7 +310,7 @@ class _NavigationRailHeader extends StatelessWidget {
                               opacity: animation.value,
                               child: Text(
                                 'REPLY',
-                                style: textTheme.bodyLarge!.copyWith(
+                                style: textTheme.bodyText1.copyWith(
                                   color: ReplyColors.white50,
                                 ),
                               ),
@@ -317,8 +323,8 @@ class _NavigationRailHeader extends StatelessWidget {
                     if (animation.value > 0)
                       Opacity(
                         opacity: animation.value,
-                        child: const Row(
-                          children: [
+                        child: Row(
+                          children: const [
                             SizedBox(width: 18),
                             ProfileAvatar(
                               avatar: 'reply/avatars/avatar_2.jpg',
@@ -352,7 +358,8 @@ class _NavigationRailHeader extends StatelessWidget {
 }
 
 class _NavigationRailFolderSection extends StatelessWidget {
-  const _NavigationRailFolderSection({required this.folders});
+  const _NavigationRailFolderSection({@required this.folders})
+      : assert(folders != null);
 
   final Map<String, String> folders;
 
@@ -395,9 +402,9 @@ class _NavigationRailFolderSection extends StatelessWidget {
                       ),
                       child: Text(
                         'FOLDERS',
-                        style: textTheme.bodySmall!.copyWith(
+                        style: textTheme.caption.copyWith(
                           color: navigationRailTheme
-                              .unselectedLabelTextStyle!.color,
+                              .unselectedLabelTextStyle.color,
                         ),
                       ),
                     ),
@@ -415,18 +422,18 @@ class _NavigationRailFolderSection extends StatelessWidget {
                                 const SizedBox(width: 12),
                                 ImageIcon(
                                   AssetImage(
-                                    folders[folder]!,
+                                    folders[folder],
                                     package: _assetsPackage,
                                   ),
                                   color: navigationRailTheme
-                                      .unselectedLabelTextStyle!.color,
+                                      .unselectedLabelTextStyle.color,
                                 ),
                                 const SizedBox(width: 24),
                                 Text(
                                   folder,
-                                  style: textTheme.bodyLarge!.copyWith(
+                                  style: textTheme.bodyText1.copyWith(
                                     color: navigationRailTheme
-                                        .unselectedLabelTextStyle!.color,
+                                        .unselectedLabelTextStyle.color,
                                   ),
                                 ),
                                 const SizedBox(height: 72),
@@ -449,12 +456,12 @@ class _NavigationRailFolderSection extends StatelessWidget {
 class _MobileNav extends StatefulWidget {
   const _MobileNav({
     this.inboxKey,
-    required this.destinations,
-    required this.folders,
-    required this.onItemTapped,
+    this.destinations,
+    this.folders,
+    this.onItemTapped,
   });
 
-  final UniqueKey? inboxKey;
+  final UniqueKey inboxKey;
   final List<_Destination> destinations;
   final Map<String, String> folders;
   final void Function(int, MailboxPageType) onItemTapped;
@@ -465,12 +472,12 @@ class _MobileNav extends StatefulWidget {
 
 class _MobileNavState extends State<_MobileNav> with TickerProviderStateMixin {
   final _bottomDrawerKey = GlobalKey(debugLabel: 'Bottom Drawer');
-  late AnimationController _drawerController;
-  late AnimationController _dropArrowController;
-  late AnimationController _bottomAppBarController;
-  late Animation<double> _drawerCurve;
-  late Animation<double> _dropArrowCurve;
-  late Animation<double> _bottomAppBarCurve;
+  AnimationController _drawerController;
+  AnimationController _dropArrowController;
+  AnimationController _bottomAppBarController;
+  Animation<double> _drawerCurve;
+  Animation<double> _dropArrowCurve;
+  Animation<double> _bottomAppBarCurve;
 
   @override
   void initState() {
@@ -548,12 +555,12 @@ class _MobileNavState extends State<_MobileNav> with TickerProviderStateMixin {
 
   double get _bottomDrawerHeight {
     final renderBox =
-        _bottomDrawerKey.currentContext!.findRenderObject() as RenderBox;
+        _bottomDrawerKey.currentContext.findRenderObject() as RenderBox;
     return renderBox.size.height;
   }
 
   void _handleDragUpdate(DragUpdateDetails details) {
-    _drawerController.value -= details.primaryDelta! / _bottomDrawerHeight;
+    _drawerController.value -= details.primaryDelta / _bottomDrawerHeight;
   }
 
   void _handleDragEnd(DragEndDetails details) {
@@ -624,25 +631,21 @@ class _MobileNavState extends State<_MobileNav> with TickerProviderStateMixin {
             ),
           ),
         ),
-        MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: GestureDetector(
-            onTap: () {
-              _drawerController.reverse();
-              _dropArrowController.reverse();
-            },
-            child: Visibility(
-              maintainAnimation: true,
-              maintainState: true,
-              visible: _bottomDrawerVisible,
-              child: FadeTransition(
-                opacity: _drawerCurve,
-                child: Container(
-                  height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
-                  color:
-                      Theme.of(context).bottomSheetTheme.modalBackgroundColor,
-                ),
+        GestureDetector(
+          onTap: () {
+            _drawerController.reverse();
+            _dropArrowController.reverse();
+          },
+          child: Visibility(
+            maintainAnimation: true,
+            maintainState: true,
+            visible: _bottomDrawerVisible,
+            child: FadeTransition(
+              opacity: _drawerCurve,
+              child: Container(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                color: Theme.of(context).bottomSheetTheme.modalBackgroundColor,
               ),
             ),
           ),
@@ -709,12 +712,12 @@ class _MobileNavState extends State<_MobileNav> with TickerProviderStateMixin {
 
 class _AnimatedBottomAppBar extends StatelessWidget {
   const _AnimatedBottomAppBar({
-    required this.bottomAppBarController,
-    required this.bottomAppBarCurve,
-    required this.bottomDrawerVisible,
-    required this.drawerController,
-    required this.dropArrowCurve,
-    required this.navigationDestinations,
+    this.bottomAppBarController,
+    this.bottomAppBarCurve,
+    this.bottomDrawerVisible,
+    this.drawerController,
+    this.dropArrowCurve,
+    this.navigationDestinations,
     this.selectedMailbox,
     this.toggleBottomDrawerVisibility,
   });
@@ -725,8 +728,8 @@ class _AnimatedBottomAppBar extends StatelessWidget {
   final AnimationController drawerController;
   final Animation<double> dropArrowCurve;
   final List<_Destination> navigationDestinations;
-  final MailboxPageType? selectedMailbox;
-  final ui.VoidCallback? toggleBottomDrawerVisibility;
+  final MailboxPageType selectedMailbox;
+  final ui.VoidCallback toggleBottomDrawerVisibility;
 
   @override
   Widget build(BuildContext context) {
@@ -788,7 +791,7 @@ class _AnimatedBottomAppBar extends StatelessWidget {
                                       }).textLabel,
                                       style: Theme.of(context)
                                           .textTheme
-                                          .bodyLarge!
+                                          .bodyText1
                                           .copyWith(color: ReplyColors.white50),
                                     ),
                                   ),
@@ -816,7 +819,8 @@ class _AnimatedBottomAppBar extends StatelessWidget {
 }
 
 class _BottomAppBarActionItems extends StatelessWidget {
-  const _BottomAppBarActionItems({required this.drawerVisible});
+  const _BottomAppBarActionItems({@required this.drawerVisible})
+      : assert(drawerVisible != null);
 
   final bool drawerVisible;
 
@@ -825,7 +829,7 @@ class _BottomAppBarActionItems extends StatelessWidget {
     return Consumer<EmailStore>(
       builder: (context, model, child) {
         final onMailView = model.onMailView;
-        Color? starIconColor;
+        Color starIconColor;
 
         if (onMailView) {
           starIconColor = model.isCurrentEmailStarred
@@ -868,7 +872,7 @@ class _BottomAppBarActionItems extends StatelessWidget {
                             }
                             if (model.selectedMailboxPage ==
                                 MailboxPageType.starred) {
-                              mobileMailNavKey.currentState!.pop();
+                              mobileMailNavKey.currentState.pop();
                               model.selectedEmailId = -1;
                             }
                           },
@@ -886,7 +890,7 @@ class _BottomAppBarActionItems extends StatelessWidget {
                               model.selectedEmailId,
                             );
 
-                            mobileMailNavKey.currentState!.pop();
+                            mobileMailNavKey.currentState.pop();
                             model.selectedEmailId = -1;
                           },
                           color: ReplyColors.white50,
@@ -920,12 +924,16 @@ class _BottomAppBarActionItems extends StatelessWidget {
 
 class _BottomDrawerDestinations extends StatelessWidget {
   const _BottomDrawerDestinations({
-    required this.destinations,
-    required this.drawerController,
-    required this.dropArrowController,
-    required this.selectedMailbox,
-    required this.onItemTapped,
-  });
+    @required this.destinations,
+    @required this.drawerController,
+    @required this.dropArrowController,
+    @required this.selectedMailbox,
+    @required this.onItemTapped,
+  })  : assert(destinations != null),
+        assert(drawerController != null),
+        assert(dropArrowController != null),
+        assert(selectedMailbox != null),
+        assert(onItemTapped != null);
 
   final List<_Destination> destinations;
   final AnimationController drawerController;
@@ -959,7 +967,6 @@ class _BottomDrawerDestinations extends StatelessWidget {
             );
           },
           child: ListTile(
-            mouseCursor: SystemMouseCursors.click,
             leading: ImageIcon(
               AssetImage(
                 destination.icon,
@@ -967,14 +974,14 @@ class _BottomDrawerDestinations extends StatelessWidget {
               ),
               color: destination.type == selectedMailbox
                   ? theme.colorScheme.secondary
-                  : theme.navigationRailTheme.unselectedLabelTextStyle!.color,
+                  : theme.navigationRailTheme.unselectedLabelTextStyle.color,
             ),
             title: Text(
               destination.textLabel,
-              style: theme.textTheme.bodyMedium!.copyWith(
+              style: theme.textTheme.bodyText2.copyWith(
                 color: destination.type == selectedMailbox
                     ? theme.colorScheme.secondary
-                    : theme.navigationRailTheme.unselectedLabelTextStyle!.color,
+                    : theme.navigationRailTheme.unselectedLabelTextStyle.color,
               ),
             ),
           ),
@@ -990,23 +997,24 @@ class _BottomDrawerDestinations extends StatelessWidget {
 
 class _Destination {
   const _Destination({
-    required this.type,
-    required this.textLabel,
-    required this.icon,
-  });
+    @required this.type,
+    @required this.textLabel,
+    @required this.icon,
+  })  : assert(type != null),
+        assert(textLabel != null),
+        assert(icon != null);
 
   // Which mailbox page to display. For example, 'Starred' or 'Trash'.
   final MailboxPageType type;
-
   // The localized text label for the inbox.
   final String textLabel;
-
   // The icon that appears next to the text label for the inbox.
   final String icon;
 }
 
 class _BottomDrawerFolderSection extends StatelessWidget {
-  const _BottomDrawerFolderSection({required this.folders});
+  const _BottomDrawerFolderSection({@required this.folders})
+      : assert(folders != null);
 
   final Map<String, String> folders;
 
@@ -1021,18 +1029,17 @@ class _BottomDrawerFolderSection extends StatelessWidget {
           InkWell(
             onTap: () {},
             child: ListTile(
-              mouseCursor: SystemMouseCursors.click,
               leading: ImageIcon(
                 AssetImage(
-                  folders[folder]!,
+                  folders[folder],
                   package: _assetsPackage,
                 ),
-                color: navigationRailTheme.unselectedLabelTextStyle!.color,
+                color: navigationRailTheme.unselectedLabelTextStyle.color,
               ),
               title: Text(
                 folder,
-                style: theme.textTheme.bodyMedium!.copyWith(
-                  color: navigationRailTheme.unselectedLabelTextStyle!.color,
+                style: theme.textTheme.bodyText2.copyWith(
+                  color: navigationRailTheme.unselectedLabelTextStyle.color,
                 ),
               ),
             ),
@@ -1043,9 +1050,7 @@ class _BottomDrawerFolderSection extends StatelessWidget {
 }
 
 class _MailNavigator extends StatefulWidget {
-  const _MailNavigator({
-    required this.child,
-  });
+  const _MailNavigator({@required this.child}) : assert(child != null);
 
   final Widget child;
 
@@ -1076,8 +1081,10 @@ class _MailNavigatorState extends State<_MailNavigator> {
               },
               settings: settings,
             );
+            break;
           case ReplyApp.composeRoute:
             return ReplyApp.createComposeRoute(settings);
+            break;
         }
         return null;
       },
@@ -1086,7 +1093,7 @@ class _MailNavigatorState extends State<_MailNavigator> {
 }
 
 class _ReplyLogo extends StatelessWidget {
-  const _ReplyLogo();
+  const _ReplyLogo({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -1127,11 +1134,11 @@ class _ReplyFabState extends State<_ReplyFab>
     // ComposePage and we are not on the SearchPage, then we can push
     // a ComposePage onto our navigator. We return true at the end
     // so nothing is popped.
-    desktopMailNavKey.currentState!.popUntil(
+    desktopMailNavKey.currentState.popUntil(
       (route) {
         var currentRoute = route.settings.name;
         if (currentRoute != ReplyApp.composeRoute && !onSearchPage) {
-          desktopMailNavKey.currentState!
+          desktopMailNavKey.currentState
               .restorablePushNamed(ReplyApp.composeRoute);
         }
         return true;
@@ -1168,7 +1175,7 @@ class _ReplyFabState extends State<_ReplyFab>
           return Container(
             height: 56,
             padding: EdgeInsets.symmetric(
-              vertical: ui.lerpDouble(0, 6, animation.value)!,
+              vertical: ui.lerpDouble(0, 6, animation.value),
             ),
             child: animation.value == 0
                 ? FloatingActionButton(
@@ -1192,7 +1199,7 @@ class _ReplyFabState extends State<_ReplyFab>
                               tooltip.toUpperCase(),
                               style: Theme.of(context)
                                   .textTheme
-                                  .headlineSmall!
+                                  .headline5
                                   .copyWith(
                                     fontSize: 16,
                                     color: theme.colorScheme.onSecondary,
@@ -1206,7 +1213,9 @@ class _ReplyFabState extends State<_ReplyFab>
                   ),
           );
         } else {
-          // TODO(x): State restoration of compose page on mobile is blocked because OpenContainer does not support restorablePush, https://github.com/flutter/gallery/issues/570.
+          // TODO(shihaohong): State restoration of compose page on mobile is
+          // blocked because OpenContainer does not support restorablePush.
+          // See https://github.com/flutter/flutter/issues/69924.
           return OpenContainer(
             openBuilder: (context, closedContainer) {
               return const ComposePage();
@@ -1241,9 +1250,10 @@ class _ReplyFabState extends State<_ReplyFab>
 
 class _FadeThroughTransitionSwitcher extends StatelessWidget {
   const _FadeThroughTransitionSwitcher({
-    required this.fillColor,
-    required this.child,
-  });
+    @required this.fillColor,
+    @required this.child,
+  })  : assert(fillColor != null),
+        assert(child != null);
 
   final Widget child;
   final Color fillColor;
@@ -1265,7 +1275,9 @@ class _FadeThroughTransitionSwitcher extends StatelessWidget {
 }
 
 class _SharedAxisTransitionSwitcher extends StatelessWidget {
-  const _SharedAxisTransitionSwitcher({required this.defaultChild});
+  const _SharedAxisTransitionSwitcher({
+    @required this.defaultChild,
+  }) : assert(defaultChild != null);
 
   final Widget defaultChild;
 

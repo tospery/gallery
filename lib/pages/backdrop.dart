@@ -19,25 +19,25 @@ const double _settingsButtonHeightMobile = 40;
 
 class Backdrop extends StatefulWidget {
   const Backdrop({
-    super.key,
+    Key key,
     this.settingsPage,
     this.homePage,
-  });
+  }) : super(key: key);
 
-  final Widget? settingsPage;
-  final Widget? homePage;
+  final Widget settingsPage;
+  final Widget homePage;
 
   @override
-  State<Backdrop> createState() => _BackdropState();
+  _BackdropState createState() => _BackdropState();
 }
 
 class _BackdropState extends State<Backdrop> with TickerProviderStateMixin {
-  late AnimationController _settingsPanelController;
-  late AnimationController _iconController;
-  late FocusNode _settingsPageFocusNode;
-  late ValueNotifier<bool> _isSettingsOpenNotifier;
-  late Widget _settingsPage;
-  late Widget _homePage;
+  AnimationController _settingsPanelController;
+  AnimationController _iconController;
+  FocusNode _settingsPageFocusNode;
+  ValueNotifier<bool> _isSettingsOpenNotifier;
+  Widget _settingsPage;
+  Widget _homePage;
 
   @override
   void initState() {
@@ -205,7 +205,7 @@ class _BackdropState extends State<Backdrop> with TickerProviderStateMixin {
                     elevation: 7,
                     clipBehavior: Clip.antiAlias,
                     borderRadius: BorderRadius.circular(40),
-                    color: Theme.of(context).colorScheme.secondaryContainer,
+                    color: Theme.of(context).colorScheme.secondaryVariant,
                     child: Container(
                       constraints: const BoxConstraints(
                         maxHeight: 560,
@@ -238,11 +238,11 @@ class _BackdropState extends State<Backdrop> with TickerProviderStateMixin {
 }
 
 class _SettingsIcon extends AnimatedWidget {
-  const _SettingsIcon({
-    required this.animationController,
-    required this.toggleSettings,
-    required this.isSettingsOpenNotifier,
-  }) : super(listenable: animationController);
+  const _SettingsIcon(
+      {this.animationController,
+      this.toggleSettings,
+      this.isSettingsOpenNotifier})
+      : super(listenable: animationController);
 
   final AnimationController animationController;
   final VoidCallback toggleSettings;
@@ -250,8 +250,8 @@ class _SettingsIcon extends AnimatedWidget {
 
   String _settingsSemanticLabel(bool isOpen, BuildContext context) {
     return isOpen
-        ? GalleryLocalizations.of(context)!.settingsButtonCloseLabel
-        : GalleryLocalizations.of(context)!.settingsButtonLabel;
+        ? GalleryLocalizations.of(context).settingsButtonCloseLabel
+        : GalleryLocalizations.of(context).settingsButtonLabel;
   }
 
   @override
@@ -278,14 +278,14 @@ class _SettingsIcon extends AnimatedWidget {
             color:
                 isSettingsOpenNotifier.value & !animationController.isAnimating
                     ? Colors.transparent
-                    : Theme.of(context).colorScheme.secondaryContainer,
+                    : Theme.of(context).colorScheme.secondaryVariant,
             clipBehavior: Clip.antiAlias,
             child: InkWell(
               onTap: () {
                 toggleSettings();
                 SemanticsService.announce(
                   _settingsSemanticLabel(isSettingsOpenNotifier.value, context),
-                  GalleryOptions.of(context).resolvedTextDirection()!,
+                  GalleryOptions.of(context).resolvedTextDirection(),
                 );
               },
               child: Padding(

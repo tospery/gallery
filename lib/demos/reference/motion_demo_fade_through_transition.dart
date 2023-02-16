@@ -9,10 +9,10 @@ import 'package:flutter_gen/gen_l10n/gallery_localizations.dart';
 // BEGIN fadeThroughTransitionDemo
 
 class FadeThroughTransitionDemo extends StatefulWidget {
-  const FadeThroughTransitionDemo({super.key});
+  const FadeThroughTransitionDemo({Key key}) : super(key: key);
 
   @override
-  State<FadeThroughTransitionDemo> createState() =>
+  _FadeThroughTransitionDemoState createState() =>
       _FadeThroughTransitionDemoState();
 }
 
@@ -27,7 +27,7 @@ class _FadeThroughTransitionDemoState extends State<FadeThroughTransitionDemo> {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = GalleryLocalizations.of(context)!;
+    final localizations = GalleryLocalizations.of(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -39,7 +39,7 @@ class _FadeThroughTransitionDemoState extends State<FadeThroughTransitionDemo> {
               '(${localizations.demoFadeThroughDemoInstructions})',
               style: Theme.of(context)
                   .textTheme
-                  .titleSmall!
+                  .subtitle2
                   .copyWith(color: Colors.white),
             ),
           ],
@@ -88,7 +88,7 @@ class _FadeThroughTransitionDemoState extends State<FadeThroughTransitionDemo> {
 class _ExampleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final localizations = GalleryLocalizations.of(context)!;
+    final localizations = GalleryLocalizations.of(context);
     final textTheme = Theme.of(context).textTheme;
 
     return Expanded(
@@ -119,11 +119,11 @@ class _ExampleCard extends StatelessWidget {
                     children: [
                       Text(
                         localizations.demoFadeThroughTextPlaceholder,
-                        style: textTheme.bodyLarge,
+                        style: textTheme.bodyText1,
                       ),
                       Text(
                         localizations.demoFadeThroughTextPlaceholder,
-                        style: textTheme.bodySmall,
+                        style: textTheme.caption,
                       ),
                     ],
                   ),
@@ -188,7 +188,7 @@ class _SearchPage extends StatelessWidget {
             package: 'flutter_gallery_assets',
             width: 40,
           ),
-          title: Text('${localizations!.demoMotionListTileTitle} ${index + 1}'),
+          title: Text(localizations.demoMotionListTileTitle + ' ${index + 1}'),
           subtitle: Text(localizations.demoMotionPlaceholderSubtitle),
         );
       },

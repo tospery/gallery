@@ -5,16 +5,10 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:meta/meta.dart';
 
 const _l10nDir = 'lib/l10n';
-// Note that the filename for `intl_en_US.xml` is used by the internal
-// translation console and changing the filename may require manually updating
-// already translated messages to point to the new file. Therefore, avoid doing so
-// unless necessary.
-const _englishXmlPath = '$_l10nDir/intl_en_US.xml';
-const _englishArbPath = '$_l10nDir/intl_en.arb';
-
-const _xmlHeader = '''
+const _intlHeader = '''
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   This file was automatically generated.
@@ -42,22 +36,29 @@ String _escapeXml(String xml) {
       .replaceAll('<', '&lt;');
 }
 
-String readEnglishXml() => File(_englishXmlPath).readAsStringSync();
-
-/// Updates an intl_*.xml file from an intl_*.arb file. Defaults to English (US).
-Future<void> arbToXml({
-  String arbPath = _englishArbPath,
-  String xmlPath = _englishXmlPath,
-  bool isDryRun = false,
-}) async {
-  final output = isDryRun ? stdout : File(xmlPath).openWrite();
-  final outputXml = await generateXmlFromArb(arbPath);
-  output.write(outputXml);
+/// Processes the XML files.
+///
+/// Note that the filename for `intl_en_US.xml` is used by the internal
+/// translation console and changing the filename may require manually updating
+/// already translated messages to point to the new file. Therefore, avoid doing so
+/// unless necessary.
+Future<void> englishArbsToXmls({bool isDryRun = false}) async {
+  final output =
+      isDryRun ? stdout : File('$_l10nDir/intl_en_US.xml').openWrite();
+  await generateXmlFromArb(
+    inputArb: File('$_l10nDir/intl_en.arb'),
+    outputXml: output,
+    xmlHeader: _intlHeader,
+  );
   await output.close();
 }
 
-Future<String> generateXmlFromArb([String arbPath = _englishArbPath]) async {
-  final inputArb = File(arbPath);
+@visibleForTesting
+Future<void> generateXmlFromArb({
+  File inputArb,
+  IOSink outputXml,
+  String xmlHeader,
+}) async {
   final bundle =
       jsonDecode(await inputArb.readAsString()) as Map<String, dynamic>;
 
@@ -66,7 +67,7 @@ Future<String> generateXmlFromArb([String arbPath = _englishArbPath]) async {
     return _escapeXml(bundle[key] as String);
   }
 
-  final xml = StringBuffer(_xmlHeader);
+  final xml = StringBuffer(xmlHeader);
 
   for (final key in bundle.keys) {
     if (key == '@@last_modified') {
@@ -80,7 +81,7 @@ Future<String> generateXmlFromArb([String arbPath = _englishArbPath]) async {
     final resourceId = key.substring(1);
     final name = _escapeXml(resourceId);
     final metaInfo = bundle[key] as Map<String, dynamic>;
-    assert(metaInfo['description'] != null);
+    assert(metaInfo != null && metaInfo['description'] != null);
     var description = _escapeXml(metaInfo['description'] as String);
 
     if (metaInfo.containsKey('plural')) {
@@ -148,5 +149,5 @@ Future<String> generateXmlFromArb([String arbPath = _englishArbPath]) async {
     }
   }
   xml.writeln('</resources>');
-  return xml.toString();
+  outputXml.write(xml.toString());
 }

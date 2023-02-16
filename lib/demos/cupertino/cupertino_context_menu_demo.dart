@@ -9,11 +9,11 @@ import 'package:flutter_gen/gen_l10n/gallery_localizations.dart';
 // BEGIN cupertinoContextMenuDemo
 
 class CupertinoContextMenuDemo extends StatelessWidget {
-  const CupertinoContextMenuDemo({super.key});
+  const CupertinoContextMenuDemo({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final galleryLocalizations = GalleryLocalizations.of(context)!;
+    final galleryLocalizations = GalleryLocalizations.of(context);
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         automaticallyImplyLeading: false,

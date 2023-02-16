@@ -11,7 +11,7 @@ double _shippingCostPerItem = 7;
 
 class AppStateModel extends Model {
   // All the available products.
-  List<Product> _availableProducts = [];
+  List<Product> _availableProducts;
 
   // The currently selected category of products.
   Category _selectedCategory = categoryAll;
@@ -29,7 +29,7 @@ class AppStateModel extends Model {
   // Totaled prices of the items in the cart.
   double get subtotalCost {
     return _productsInCart.keys
-        .map((id) => _availableProducts[id].price * _productsInCart[id]!)
+        .map((id) => _availableProducts[id].price * _productsInCart[id])
         .fold(0.0, (sum, e) => sum + e);
   }
 
@@ -47,6 +47,10 @@ class AppStateModel extends Model {
 
   // Returns a copy of the list of available products, filtered by category.
   List<Product> getProducts() {
+    if (_availableProducts == null) {
+      return [];
+    }
+
     if (_selectedCategory == categoryAll) {
       return List<Product>.from(_availableProducts);
     } else {
@@ -61,7 +65,7 @@ class AppStateModel extends Model {
     if (!_productsInCart.containsKey(productId)) {
       _productsInCart[productId] = 1;
     } else {
-      _productsInCart[productId] = _productsInCart[productId]! + 1;
+      _productsInCart[productId]++;
     }
 
     notifyListeners();
@@ -71,10 +75,11 @@ class AppStateModel extends Model {
   // quantity must be non-null positive value.
   void addMultipleProductsToCart(int productId, int quantity) {
     assert(quantity > 0);
+    assert(quantity != null);
     if (!_productsInCart.containsKey(productId)) {
       _productsInCart[productId] = quantity;
     } else {
-      _productsInCart[productId] = _productsInCart[productId]! + quantity;
+      _productsInCart[productId] += quantity;
     }
 
     notifyListeners();
@@ -86,7 +91,7 @@ class AppStateModel extends Model {
       if (_productsInCart[productId] == 1) {
         _productsInCart.remove(productId);
       } else {
-        _productsInCart[productId] = _productsInCart[productId]! - 1;
+        _productsInCart[productId]--;
       }
     }
 

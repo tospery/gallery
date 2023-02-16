@@ -22,10 +22,7 @@ const _bottomPadding = 44.0;
 const _cardToScreenWidthRatio = 0.59;
 
 class MobileAsymmetricView extends StatelessWidget {
-  const MobileAsymmetricView({
-    super.key,
-    required this.products,
-  });
+  const MobileAsymmetricView({Key key, this.products}) : super(key: key);
 
   final List<Product> products;
 
@@ -33,7 +30,7 @@ class MobileAsymmetricView extends StatelessWidget {
     BuildContext context,
     BoxConstraints constraints,
   ) {
-    if (products.isEmpty) {
+    if (products == null || products.isEmpty) {
       return const [];
     }
 
@@ -137,9 +134,9 @@ class MobileAsymmetricView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: PageStatus.of(context)!.cartController,
+      animation: PageStatus.of(context).cartController,
       builder: (context, child) => AnimatedBuilder(
-        animation: PageStatus.of(context)!.menuController,
+        animation: PageStatus.of(context).menuController,
         builder: (context, child) => ExcludeSemantics(
           excluding: !productPageIsVisible(context),
           child: LayoutBuilder(
@@ -165,10 +162,7 @@ class MobileAsymmetricView extends StatelessWidget {
 }
 
 class DesktopAsymmetricView extends StatelessWidget {
-  const DesktopAsymmetricView({
-    super.key,
-    required this.products,
-  });
+  const DesktopAsymmetricView({Key key, this.products}) : super(key: key);
 
   final List<Product> products;
 
@@ -210,7 +204,7 @@ class DesktopAsymmetricView extends StatelessWidget {
     final columnCount = min(idealColumnCount, max(products.length, 1));
 
     return AnimatedBuilder(
-      animation: PageStatus.of(context)!.cartController,
+      animation: PageStatus.of(context).cartController,
       builder: (context, child) => ExcludeSemantics(
         excluding: !productPageIsVisible(context),
         child: DesktopColumns(
@@ -228,12 +222,12 @@ class DesktopAsymmetricView extends StatelessWidget {
 
 class DesktopColumns extends StatelessWidget {
   const DesktopColumns({
-    super.key,
-    required this.columnCount,
-    required this.products,
-    required this.largeImageWidth,
-    required this.smallImageWidth,
-  });
+    Key key,
+    @required this.columnCount,
+    @required this.products,
+    @required this.largeImageWidth,
+    @required this.smallImageWidth,
+  }) : super(key: key);
 
   final int columnCount;
   final List<Product> products;
@@ -242,7 +236,7 @@ class DesktopColumns extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget gap = Container(width: 24);
+    final Widget _gap = Container(width: 24);
 
     final productCardLists = balancedLayout(
       context: context,
@@ -284,7 +278,7 @@ class DesktopColumns extends StatelessWidget {
                 if (generalizedColumnIndex % 2 == 0) {
                   return productCardColumns[generalizedColumnIndex ~/ 2];
                 } else {
-                  return gap;
+                  return _gap;
                 }
               },
             ),

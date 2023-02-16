@@ -16,22 +16,21 @@ class _TabInfo {
 }
 
 class CupertinoTabBarDemo extends StatelessWidget {
-  const CupertinoTabBarDemo({super.key});
+  const CupertinoTabBarDemo({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final localizations = GalleryLocalizations.of(context)!;
-    final tabInfo = [
+    final _tabInfo = [
       _TabInfo(
-        localizations.cupertinoTabBarHomeTab,
+        GalleryLocalizations.of(context).cupertinoTabBarHomeTab,
         CupertinoIcons.home,
       ),
       _TabInfo(
-        localizations.cupertinoTabBarChatTab,
+        GalleryLocalizations.of(context).cupertinoTabBarChatTab,
         CupertinoIcons.conversation_bubble,
       ),
       _TabInfo(
-        localizations.cupertinoTabBarProfileTab,
+        GalleryLocalizations.of(context).cupertinoTabBarProfileTab,
         CupertinoIcons.profile_circled,
       ),
     ];
@@ -42,7 +41,7 @@ class CupertinoTabBarDemo extends StatelessWidget {
         restorationId: 'cupertino_tab_scaffold',
         tabBar: CupertinoTabBar(
           items: [
-            for (final tabInfo in tabInfo)
+            for (final tabInfo in _tabInfo)
               BottomNavigationBarItem(
                 label: tabInfo.title,
                 icon: Icon(tabInfo.icon),
@@ -53,10 +52,10 @@ class CupertinoTabBarDemo extends StatelessWidget {
           return CupertinoTabView(
             restorationScopeId: 'cupertino_tab_view_$index',
             builder: (context) => _CupertinoDemoTab(
-              title: tabInfo[index].title,
-              icon: tabInfo[index].icon,
+              title: _tabInfo[index].title,
+              icon: _tabInfo[index].icon,
             ),
-            defaultTitle: tabInfo[index].title,
+            defaultTitle: _tabInfo[index].title,
           );
         },
       ),
@@ -66,9 +65,10 @@ class CupertinoTabBarDemo extends StatelessWidget {
 
 class _CupertinoDemoTab extends StatelessWidget {
   const _CupertinoDemoTab({
-    required this.title,
-    required this.icon,
-  });
+    Key key,
+    @required this.title,
+    @required this.icon,
+  }) : super(key: key);
 
   final String title;
   final IconData icon;

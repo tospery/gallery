@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'dart:async';
 import 'dart:convert' show json;
 import 'dart:io' show sleep, stdout;
 
@@ -12,7 +13,7 @@ import 'package:test/test.dart' hide TypeMatcher, isInstanceOf;
 //    flutter drive --profile --trace-startup -t test_driver/transitions_perf.dart -d <device>
 // To run this test for just Crane, with scrolling:
 //    flutter drive --profile --trace-startup -t test_driver/transitions_perf.dart -d <device> --dart-define=onlyCrane=true
-// To run this test for just Reply, with animations:
+// To run this test for just Crane, with animations:
 //    flutter drive --profile --trace-startup -t test_driver/transitions_perf.dart -d <device> --dart-define=onlyReply=true
 // Enable semantics with the --with_semantics flag
 // Note: The number of tests executed with timeline collection enabled
@@ -119,7 +120,7 @@ Future<bool> isPresent(SerializableFinder finder, FlutterDriver driver,
   }
 }
 
-/// Scrolls each demo into view, launches it, then returns to the
+/// Scrolls each each demo into view, launches it, then returns to the
 /// home screen, twice.
 ///
 /// Optionally specify a callback to perform further actions for each demo.
@@ -128,12 +129,12 @@ Future<bool> isPresent(SerializableFinder finder, FlutterDriver driver,
 Future<void> runDemos(
   List<String> demos,
   FlutterDriver driver, {
-  Future<void> Function()? additionalActions,
+  Future<void> Function() additionalActions,
   bool scrollToTopWhenDone = true,
 }) async {
-  String? currentDemoCategory;
-  late SerializableFinder demoList;
-  SerializableFinder? demoItem;
+  String currentDemoCategory;
+  SerializableFinder demoList;
+  SerializableFinder demoItem;
 
   for (final demo in demos) {
     if (_skippedDemos.contains(demo)) continue;
@@ -166,27 +167,11 @@ Future<void> runDemos(
     demoItem = find.byValueKey(demo);
 
     stdout.writeln('scrolling to demo');
-
-    // demoList below may be either the horizontally-scrolling Studies carousel
-    // or vertically scrolling Material/Cupertino/Other demo lists.
-    //
-    // The Studies carousel has scroll physics that snap items to the starting
-    // edge of the widget. TestDriver.scrollUntilVisible scrolls in increments
-    // along the x and y axes; if the distance is too small, the list snaps
-    // back to its previous position, if it's too large, it may scroll too far.
-    // To resolve this, we scroll 75% of the list width/height dimensions on
-    // each increment.
-    final DriverOffset topLeft =
-        await driver.getTopLeft(demoList, timeout: const Duration(seconds: 10));
-    final DriverOffset bottomRight = await driver.getBottomRight(demoList,
-        timeout: const Duration(seconds: 10));
-    final double listWidth = bottomRight.dx - topLeft.dx;
-    final double listHeight = bottomRight.dy - topLeft.dy;
     await driver.scrollUntilVisible(
       demoList,
       demoItem,
-      dxScroll: -listWidth * 0.75,
-      dyScroll: -listHeight * 0.75,
+      dxScroll: -500,
+      dyScroll: -50,
       alignment: 0.5,
       timeout: const Duration(seconds: 10),
     );
@@ -212,15 +197,15 @@ Future<void> runDemos(
     stdout.writeln('< Success');
   }
 
-  if (scrollToTopWhenDone) await scrollToTop(demoItem!, driver);
+  if (scrollToTopWhenDone) await scrollToTop(demoItem, driver);
 }
 
 void main([List<String> args = const <String>[]]) {
   group('Flutter Gallery transitions', () {
-    late FlutterDriver driver;
+    FlutterDriver driver;
 
-    late bool isTestingCraneOnly;
-    late bool isTestingReplyOnly;
+    bool isTestingCraneOnly;
+    bool isTestingReplyOnly;
 
     setUpAll(() async {
       driver = await FlutterDriver.connect();
@@ -248,7 +233,9 @@ void main([List<String> args = const <String>[]]) {
     });
 
     tearDownAll(() async {
-      await driver.close();
+      if (driver != null) {
+        await driver.close();
+      }
 
       stdout.writeln(
           'Timeline summaries for profiled demos have been output to the build/ directory.');

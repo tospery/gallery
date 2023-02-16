@@ -195,10 +195,8 @@ class EmailStore with ChangeNotifier {
       _drafts.where((email) => !trashEmailIds.contains(email.id)).toList();
 
   Set<int> starredEmailIds = {};
-
   bool isEmailStarred(int id) =>
       _allEmails.any((email) => email.id == id && starredEmailIds.contains(id));
-
   bool get isCurrentEmailStarred => starredEmailIds.contains(currentEmail.id);
 
   List<Email> get starredEmails {
@@ -218,7 +216,6 @@ class EmailStore with ChangeNotifier {
   }
 
   Set<int> trashEmailIds = {7, 8};
-
   List<Email> get trashEmails {
     return _allEmails
         .where((email) => trashEmailIds.contains(email.id))
@@ -231,9 +228,7 @@ class EmailStore with ChangeNotifier {
   }
 
   int _selectedEmailId = -1;
-
   int get selectedEmailId => _selectedEmailId;
-
   set selectedEmailId(int value) {
     _selectedEmailId = value;
     notifyListeners();
@@ -242,18 +237,14 @@ class EmailStore with ChangeNotifier {
   bool get onMailView => _selectedEmailId > -1;
 
   MailboxPageType _selectedMailboxPage = MailboxPageType.inbox;
-
   MailboxPageType get selectedMailboxPage => _selectedMailboxPage;
-
   set selectedMailboxPage(MailboxPageType mailboxPage) {
     _selectedMailboxPage = mailboxPage;
     notifyListeners();
   }
 
   bool _onSearchPage = false;
-
   bool get onSearchPage => _onSearchPage;
-
   set onSearchPage(bool value) {
     _onSearchPage = value;
     notifyListeners();

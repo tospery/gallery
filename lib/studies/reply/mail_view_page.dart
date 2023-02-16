@@ -5,11 +5,10 @@ import 'package:gallery/studies/reply/profile_avatar.dart';
 import 'package:provider/provider.dart';
 
 class MailViewPage extends StatelessWidget {
-  const MailViewPage({
-    super.key,
-    required this.id,
-    required this.email,
-  });
+  const MailViewPage({Key key, @required this.id, @required this.email})
+      : assert(id != null),
+        assert(email != null),
+        super(key: key);
 
   final int id;
   final Email email;
@@ -51,7 +50,9 @@ class MailViewPage extends StatelessWidget {
 }
 
 class _MailViewHeader extends StatelessWidget {
-  const _MailViewHeader({required this.email});
+  const _MailViewHeader({
+    @required this.email,
+  }) : assert(email != null);
 
   final Email email;
 
@@ -65,9 +66,9 @@ class _MailViewHeader extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: SelectableText(
+              child: Text(
                 email.subject,
-                style: textTheme.headlineMedium!.copyWith(height: 1.1),
+                style: textTheme.headline4.copyWith(height: 1.1),
               ),
             ),
             IconButton(
@@ -93,14 +94,14 @@ class _MailViewHeader extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                SelectableText('${email.sender} - ${email.time}'),
+                Text('${email.sender} - ${email.time}'),
                 const SizedBox(height: 4),
-                SelectableText(
+                Text(
                   'To ${email.recipients},',
-                  style: textTheme.bodySmall!.copyWith(
+                  style: textTheme.caption.copyWith(
                     color: Theme.of(context)
                         .navigationRailTheme
-                        .unselectedLabelTextStyle!
+                        .unselectedLabelTextStyle
                         .color,
                   ),
                 ),
@@ -118,15 +119,15 @@ class _MailViewHeader extends StatelessWidget {
 }
 
 class _MailViewBody extends StatelessWidget {
-  const _MailViewBody({required this.message});
+  const _MailViewBody({@required this.message}) : assert(message != null);
 
   final String message;
 
   @override
   Widget build(BuildContext context) {
-    return SelectableText(
+    return Text(
       message,
-      style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontSize: 16),
+      style: Theme.of(context).textTheme.bodyText2.copyWith(fontSize: 16),
     );
   }
 }

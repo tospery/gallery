@@ -13,10 +13,11 @@ import 'package:scoped_model/scoped_model.dart';
 
 class MobileProductCard extends StatelessWidget {
   const MobileProductCard({
-    super.key,
+    Key key,
     this.imageAspectRatio = 33 / 49,
-    required this.product,
-  }) : assert(imageAspectRatio > 0);
+    this.product,
+  })  : assert(imageAspectRatio == null || imageAspectRatio > 0),
+        super(key: key);
 
   final double imageAspectRatio;
   final Product product;
@@ -39,11 +40,9 @@ class MobileProductCard extends StatelessWidget {
 }
 
 class DesktopProductCard extends StatelessWidget {
-  const DesktopProductCard({
-    super.key,
-    required this.product,
-    required this.imageWidth,
-  });
+  const DesktopProductCard(
+      {Key key, @required this.product, @required this.imageWidth})
+      : super(key: key);
 
   final Product product;
   final double imageWidth;
@@ -59,18 +58,12 @@ class DesktopProductCard extends StatelessWidget {
 }
 
 Widget _buildProductCard({
-  required BuildContext context,
-  required Product product,
-  double? imageWidth,
-  double? imageAspectRatio,
+  BuildContext context,
+  Product product,
+  double imageWidth,
+  double imageAspectRatio,
 }) {
   final isDesktop = isDisplayDesktop(context);
-  // In case of desktop , imageWidth is passed through [DesktopProductCard] in
-  // case of mobile imageAspectRatio is passed through [MobileProductCard].
-  // Below assert is so that correct combination should always be present.
-  assert(isDesktop && imageWidth != null ||
-      !isDesktop && imageAspectRatio != null);
-
   final formatter = NumberFormat.simpleCurrency(
     decimalDigits: 0,
     locale: Localizations.localeOf(context).toString(),
@@ -92,16 +85,13 @@ Widget _buildProductCard({
   return ScopedModelDescendant<AppStateModel>(
     builder: (context, child, model) {
       return Semantics(
-        hint: GalleryLocalizations.of(context)!
-            .shrineScreenReaderProductAddToCart,
-        child: MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: GestureDetector(
-            onTap: () {
-              model.addProductToCart(product.id);
-            },
-            child: child,
-          ),
+        hint:
+            GalleryLocalizations.of(context).shrineScreenReaderProductAddToCart,
+        child: GestureDetector(
+          onTap: () {
+            model.addProductToCart(product.id);
+          },
+          child: child,
         ),
       );
     },
@@ -114,7 +104,7 @@ Widget _buildProductCard({
             isDesktop
                 ? imageWidget
                 : AspectRatio(
-                    aspectRatio: imageAspectRatio!,
+                    aspectRatio: imageAspectRatio,
                     child: imageWidget,
                   ),
             SizedBox(
@@ -126,16 +116,16 @@ Widget _buildProductCard({
                   SizedBox(
                     width: imageWidth,
                     child: Text(
-                      product.name(context),
-                      style: theme.textTheme.labelLarge,
+                      product == null ? '' : product.name(context),
+                      style: theme.textTheme.button,
                       softWrap: true,
                       textAlign: TextAlign.center,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    formatter.format(product.price),
-                    style: theme.textTheme.bodySmall,
+                    product == null ? '' : formatter.format(product.price),
+                    style: theme.textTheme.caption,
                   ),
                 ],
               ),

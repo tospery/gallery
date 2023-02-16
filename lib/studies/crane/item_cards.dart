@@ -13,11 +13,9 @@ import 'package:gallery/studies/crane/model/destination.dart';
 const mobileThumbnailSize = 60.0;
 
 class DestinationCard extends StatelessWidget {
-  const DestinationCard({
-    super.key,
-    required this.destination,
-  });
-
+  const DestinationCard({Key key, @required this.destination})
+      : assert(destination != null),
+        super(key: key);
   final Destination destination;
 
   @override
@@ -39,15 +37,15 @@ class DestinationCard extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 20, bottom: 10),
-                    child: SelectableText(
+                    child: Text(
                       destination.destination,
-                      style: textTheme.titleMedium,
+                      style: textTheme.subtitle1,
                     ),
                   ),
-                  SelectableText(
+                  Text(
                     destination.subtitle(context),
                     semanticsLabel: destination.subtitleSemantics(context),
-                    style: textTheme.titleSmall,
+                    style: textTheme.subtitle2,
                   ),
                 ],
               ),
@@ -66,12 +64,12 @@ class DestinationCard extends StatelessWidget {
                     child: _DestinationImage(destination: destination),
                   ),
                 ),
-                title: SelectableText(destination.destination,
-                    style: textTheme.titleMedium),
-                subtitle: SelectableText(
+                title:
+                    Text(destination.destination, style: textTheme.subtitle1),
+                subtitle: Text(
                   destination.subtitle(context),
                   semanticsLabel: destination.subtitleSemantics(context),
-                  style: textTheme.titleSmall,
+                  style: textTheme.subtitle2,
                 ),
               ),
               const Divider(thickness: 1),
@@ -88,10 +86,8 @@ class DestinationCard extends StatelessWidget {
 }
 
 class _DestinationImage extends StatelessWidget {
-  const _DestinationImage({
-    required this.destination,
-  });
-
+  const _DestinationImage({@required this.destination})
+      : assert(destination != null);
   final Destination destination;
 
   @override

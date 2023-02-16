@@ -3,84 +3,51 @@
 // found in the LICENSE file.
 
 import 'package:flutter/cupertino.dart';
+
 import 'package:flutter_gen/gen_l10n/gallery_localizations.dart';
 
 // BEGIN cupertinoSwitchDemo
 
 class CupertinoSwitchDemo extends StatefulWidget {
-  const CupertinoSwitchDemo({super.key});
+  const CupertinoSwitchDemo({Key key}) : super(key: key);
 
   @override
-  State<CupertinoSwitchDemo> createState() => _CupertinoSwitchDemoState();
+  _CupertinoSwitchDemoState createState() => _CupertinoSwitchDemoState();
 }
 
 class _CupertinoSwitchDemoState extends State<CupertinoSwitchDemo>
     with RestorationMixin {
-  final RestorableBool _switchValueA = RestorableBool(false);
-  final RestorableBool _switchValueB = RestorableBool(true);
+  final RestorableBool _switchValue = RestorableBool(false);
 
   @override
   String get restorationId => 'cupertino_switch_demo';
 
   @override
-  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
-    registerForRestoration(_switchValueA, 'switch_valueA');
-    registerForRestoration(_switchValueB, 'switch_valueB');
+  void restoreState(RestorationBucket oldBucket, bool initialRestore) {
+    registerForRestoration(_switchValue, 'switch_value');
   }
 
   @override
   Widget build(BuildContext context) {
-    final localizations = GalleryLocalizations.of(context)!;
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         automaticallyImplyLeading: false,
         middle: Text(
-          localizations.demoSelectionControlsSwitchTitle,
+          GalleryLocalizations.of(context).demoSelectionControlsSwitchTitle,
         ),
       ),
       child: Center(
         child: Semantics(
           container: true,
-          label: localizations.demoSelectionControlsSwitchTitle,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CupertinoSwitch(
-                    value: _switchValueA.value,
-                    onChanged: (value) {
-                      setState(() {
-                        _switchValueA.value = value;
-                      });
-                    },
-                  ),
-                  CupertinoSwitch(
-                    value: _switchValueB.value,
-                    onChanged: (value) {
-                      setState(() {
-                        _switchValueB.value = value;
-                      });
-                    },
-                  ),
-                ],
-              ),
-              // Disabled switches
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CupertinoSwitch(
-                    value: _switchValueA.value,
-                    onChanged: null,
-                  ),
-                  CupertinoSwitch(
-                    value: _switchValueB.value,
-                    onChanged: null,
-                  ),
-                ],
-              ),
-            ],
+          label:
+              GalleryLocalizations.of(context).demoSelectionControlsSwitchTitle,
+          child: CupertinoSwitch(
+            value: _switchValue.value,
+            onChanged: (value) {
+              setState(() {
+                _switchValue.value = value;
+              });
+            },
           ),
         ),
       ),

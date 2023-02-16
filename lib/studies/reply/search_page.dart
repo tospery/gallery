@@ -3,7 +3,7 @@ import 'package:gallery/studies/reply/model/email_store.dart';
 import 'package:provider/provider.dart';
 
 class SearchPage extends StatelessWidget {
-  const SearchPage({super.key});
+  const SearchPage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -43,11 +43,11 @@ class SearchPage extends StatelessWidget {
                 ),
               ),
               const Divider(thickness: 1),
-              const Expanded(
+              Expanded(
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: const [
                       _SectionHeader(title: 'YESTERDAY'),
                       _SearchHistoryTile(
                         search: '481 Van Brunt Street',
@@ -84,8 +84,9 @@ class SearchPage extends StatelessWidget {
 }
 
 class _SectionHeader extends StatelessWidget {
-  const _SectionHeader({required this.title});
-
+  const _SectionHeader({
+    @required this.title,
+  }) : assert(title != null);
   final String title;
 
   @override
@@ -98,7 +99,7 @@ class _SectionHeader extends StatelessWidget {
       ),
       child: Text(
         title,
-        style: Theme.of(context).textTheme.labelLarge,
+        style: Theme.of(context).textTheme.button,
       ),
     );
   }
@@ -107,9 +108,10 @@ class _SectionHeader extends StatelessWidget {
 class _SearchHistoryTile extends StatelessWidget {
   const _SearchHistoryTile({
     this.icon = Icons.access_time,
-    required this.search,
-    required this.address,
-  });
+    @required this.search,
+    @required this.address,
+  })  : assert(search != null),
+        assert(address != null);
 
   final IconData icon;
   final String search;
